@@ -26,6 +26,9 @@ export const Messages = {
     notificationsSaved: "Notification preferences saved",
     routingSaved: "Lead routing settings saved",
     paymentsSaved: "Payment settings saved",
+    stageSaved: "Stage saved",
+    stageDeleted: "Stage deleted",
+    stageOrderSaved: "Stage order saved",
     mappingSaved: "Field mapping saved",
     backfillDone: (updated: number, scanned: number) =>
       `Backfill complete — updated ${updated} of ${scanned} leads`,
@@ -53,6 +56,7 @@ export const Messages = {
     templates: "Could not load templates. Please try again.",
     mappingTemplates: "Could not load mapping templates. Please try again.",
     orgSettings: "Could not load organization settings. Please try again.",
+    leadStages: "Could not load lead stages. Please try again.",
     billing: "Could not load billing information. Please try again.",
     impersonatableUsers: "Could not load users. Please try again.",
     calls: "Could not load calls. Please try again.",

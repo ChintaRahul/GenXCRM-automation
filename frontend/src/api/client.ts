@@ -8,6 +8,9 @@ import type {
   TeamType,
   Organization,
   OrgSettings,
+  StageView,
+  StageColor,
+  LeadStage,
   FieldMappingConfig,
   LeadBackfillResult,
   LeadBackfillRequest,
@@ -376,10 +379,42 @@ export const createLead = async (
 
 export const updateLead = async (
   id: string,
-  payload: Record<string, unknown>,
+  payload: Record<string, unknown> & { customStageId?: string | null },
 ): Promise<Lead> => {
   const { data } = await api.patch<Lead>(`/leads/${id}`, payload);
   return data;
+};
+
+export const getLeadStages = async (includeHidden = false): Promise<StageView[]> => {
+  const { data } = await api.get<StageView[]>("/lead-stages", {
+    params: includeHidden ? { includeHidden: true } : undefined,
+  });
+  return data;
+};
+
+export const createLeadStage = async (payload: {
+  label: string;
+  color: StageColor;
+  countsAs: LeadStage;
+}): Promise<StageView> => {
+  const { data } = await api.post<StageView>("/lead-stages", payload);
+  return data;
+};
+
+export const updateLeadStage = async (
+  key: string,
+  patch: { label?: string; color?: StageColor; isHidden?: boolean; countsAs?: LeadStage },
+): Promise<StageView> => {
+  const { data } = await api.patch<StageView>(`/lead-stages/${key}`, patch);
+  return data;
+};
+
+export const reorderLeadStages = async (keys: string[]): Promise<void> => {
+  await api.put("/lead-stages/order", { keys });
+};
+
+export const deleteLeadStage = async (id: string): Promise<void> => {
+  await api.delete(`/lead-stages/${id}`);
 };
 
 export const addNote = async (

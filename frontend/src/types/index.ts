@@ -330,6 +330,31 @@ export interface CallRecording {
   // short-lived signed playback URL on demand via getCallRecordingPlaybackUrl(id).
 }
 
+export type StageColor =
+  | "blue"
+  | "yellow"
+  | "green"
+  | "slate"
+  | "amber"
+  | "teal"
+  | "indigo"
+  | "orange"
+  | "red"
+  | "gray"
+  | "purple";
+
+export interface StageView {
+  key: string;
+  id: string | null;
+  label: string;
+  color: StageColor;
+  sortOrder: number;
+  isHidden: boolean;
+  mandatory: boolean;
+  isCustom: boolean;
+  countsAs: LeadStage | null;
+}
+
 export interface Lead {
   id: string;
   name: string;
@@ -348,6 +373,7 @@ export interface Lead {
   adSet?: { name: string };
   ad?: { name: string };
   stage: LeadStage;
+  customStage?: { id: string; label: string; color: StageColor } | null;
   score: number;
   interestedCount: number;
   tags: string[];
@@ -375,6 +401,7 @@ export interface Lead {
 
 export interface LeadFacets {
   stages: { value: LeadStage; count: number }[];
+  customStages?: { id: string; count: number }[];
   sources: { value: LeadSource; count: number }[];
   courses: string[];
   cities: string[];
