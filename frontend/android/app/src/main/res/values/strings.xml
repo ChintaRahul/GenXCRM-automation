@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">GenXCRM</string>
+    <string name="title_activity_main">GenXCRM</string>
+    <string name="package_name">com.genxcrm.app</string>
+    <string name="custom_url_scheme">com.genxcrm.app</string>
+    <string name="recording_channel_name">Call recording</string>
+    <string name="recording_notification_title">Recording call with a lead</string>
+    <string name="recording_notification_text">GenXCRM is recording this call</string>
+    <string name="consent_announcement">This call may be recorded for quality and training purposes.</string>
+    <string name="call_channel_name">Calls</string>
+    <string name="incall_answer">Answer</string>
+    <string name="incall_decline">Decline</string>
+    <string name="incall_end">End</string>
+    <string name="incall_mute">Mute</string>
+    <string name="incall_speaker">Speaker</string>
+    <string name="incall_bluetooth">Bluetooth</string>
+    <string name="incall_hold">Hold</string>
+    <string name="incall_keypad">Keypad</string>
+    <string name="incall_recording_both">Recording</string>
+    <string name="incall_recording_rep_only">Recording (your side only) — switch to Speaker to record both sides</string>
+    <string name="incall_not_recording">Not recording</string>
+</resources>

@@ -1,0 +1,901 @@
+{
+  "info": {
+    "name": "GenXCRM API",
+    "description": "Complete API collection for GenXCRM — EdTech CRM system. Base URL: {{baseUrl}}. Run Auth › Login first to populate {{token}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "orgToken", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Director\",\n  \"email\": \"director@example.com\",\n  \"password\": \"Password123!\",\n  \"orgName\": \"Acme EdTech\"\n}"
+            },
+            "auth": { "type": "noauth" }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.access_token) {",
+                  "  pm.collectionVariables.set('token', res.access_token);",
+                  "  console.log('Token saved to collection variable: token');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"director@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "auth": { "type": "noauth" }
+          }
+        },
+        {
+          "name": "Get Current User (me)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Trial Status",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/trial", "host": ["{{baseUrl}}"], "path": ["auth", "trial"] }
+          }
+        },
+        {
+          "name": "Complete Profile (post-OAuth)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/complete-profile", "host": ["{{baseUrl}}"], "path": ["auth", "complete-profile"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgName\": \"Acme EdTech\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Google OAuth — Initiate",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/google", "host": ["{{baseUrl}}"], "path": ["auth", "google"] },
+            "auth": { "type": "noauth" },
+            "description": "Opens browser-based Google OAuth flow. Use in browser, not Postman."
+          }
+        },
+        {
+          "name": "Facebook OAuth — Initiate",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/facebook", "host": ["{{baseUrl}}"], "path": ["auth", "facebook"] },
+            "auth": { "type": "noauth" },
+            "description": "Opens browser-based Facebook OAuth flow. Use in browser, not Postman."
+          }
+        },
+        {
+          "name": "Twitter/X OAuth — Initiate",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/twitter", "host": ["{{baseUrl}}"], "path": ["auth", "twitter"] },
+            "auth": { "type": "noauth" },
+            "description": "Opens browser-based Twitter OAuth flow. Use in browser, not Postman."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leads",
+      "item": [
+        {
+          "name": "List Leads",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/leads?page=1&limit=20&stage=NEW",
+              "host": ["{{baseUrl}}"],
+              "path": ["leads"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "limit", "value": "20", "description": "Items per page" },
+                { "key": "stage", "value": "NEW", "description": "Filter by stage: NEW | CONTACTED | QUALIFIED | PROPOSAL | NEGOTIATION | CLOSED_WON | CLOSED_LOST", "disabled": true },
+                { "key": "source", "value": "FACEBOOK", "description": "Filter by source", "disabled": true },
+                { "key": "search", "value": "", "description": "Search by name/email/phone", "disabled": true },
+                { "key": "assignedToId", "value": "", "description": "Filter by assigned rep ID", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Lead",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/leads", "host": ["{{baseUrl}}"], "path": ["leads"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Priya Sharma\",\n  \"email\": \"priya@example.com\",\n  \"phone\": \"+919876543210\",\n  \"source\": \"FACEBOOK\",\n  \"stage\": \"NEW\",\n  \"courseInterest\": \"Data Science\",\n  \"notes\": \"Called via FB ad\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Import Leads (Bulk)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/leads/import", "host": ["{{baseUrl}}"], "path": ["leads", "import"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leads\": [\n    {\n      \"name\": \"Arjun Mehta\",\n      \"email\": \"arjun@example.com\",\n      \"phone\": \"+919876543211\",\n      \"source\": \"CSV\"\n    },\n    {\n      \"name\": \"Sneha Patel\",\n      \"email\": \"sneha@example.com\",\n      \"phone\": \"+919876543212\",\n      \"source\": \"CSV\"\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Lead by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/leads/:id", "host": ["{{baseUrl}}"], "path": ["leads", ":id"], "variable": [{ "key": "id", "value": "lead-id-here" }] }
+          }
+        },
+        {
+          "name": "Update Lead",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/leads/:id", "host": ["{{baseUrl}}"], "path": ["leads", ":id"], "variable": [{ "key": "id", "value": "lead-id-here" }] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"CONTACTED\",\n  \"courseInterest\": \"Full Stack Development\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Soft Delete Lead",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/leads/:id", "host": ["{{baseUrl}}"], "path": ["leads", ":id"], "variable": [{ "key": "id", "value": "lead-id-here" }] }
+          }
+        },
+        {
+          "name": "Add Note to Lead",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/leads/:id/notes", "host": ["{{baseUrl}}"], "path": ["leads", ":id", "notes"], "variable": [{ "key": "id", "value": "lead-id-here" }] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Called lead — interested in weekend batch.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Reassign Lead",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/leads/:id/reassign", "host": ["{{baseUrl}}"], "path": ["leads", ":id", "reassign"], "variable": [{ "key": "id", "value": "lead-id-here" }] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignedToId\": \"user-id-here\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Stage Stats",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/leads/stats/stage", "host": ["{{baseUrl}}"], "path": ["leads", "stats", "stage"] }
+          }
+        },
+        {
+          "name": "Source Stats",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/leads/stats/source", "host": ["{{baseUrl}}"], "path": ["leads", "stats", "source"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignments",
+      "item": [
+        {
+          "name": "Bulk Assign Leads",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/assignments/bulk", "host": ["{{baseUrl}}"], "path": ["assignments", "bulk"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadIds\": [\"lead-id-1\", \"lead-id-2\"],\n  \"teamId\": \"team-id-here\"\n}"
+            },
+            "description": "Director/Manager only."
+          }
+        },
+        {
+          "name": "Assign Single Lead",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/assignments/single", "host": ["{{baseUrl}}"], "path": ["assignments", "single"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadId\": \"lead-id-here\",\n  \"teamId\": \"team-id-here\"\n}"
+            },
+            "description": "Director/Manager only. Uses round-robin within the team."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Communications",
+      "item": [
+        {
+          "name": "Send Email",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/communications/email", "host": ["{{baseUrl}}"], "path": ["communications", "email"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadId\": \"lead-id-here\",\n  \"subject\": \"Follow-up: Your Course Inquiry\",\n  \"body\": \"Hi Priya, thanks for your interest in our Data Science course...\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Send SMS",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/communications/sms", "host": ["{{baseUrl}}"], "path": ["communications", "sms"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadId\": \"lead-id-here\",\n  \"message\": \"Hi! Your demo is scheduled for tomorrow at 10am. Reply CONFIRM to confirm.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Send WhatsApp",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/communications/whatsapp", "host": ["{{baseUrl}}"], "path": ["communications", "whatsapp"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadId\": \"lead-id-here\",\n  \"message\": \"Hi Priya! Sharing the brochure for the Data Science batch starting June 1st.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Log Call",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/communications/call", "host": ["{{baseUrl}}"], "path": ["communications", "call"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadId\": \"lead-id-here\",\n  \"duration\": 300,\n  \"notes\": \"Discussed batch timings. Lead will confirm by Friday.\",\n  \"outcome\": \"INTERESTED\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Communication History (by Lead)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/communications/:leadId/history", "host": ["{{baseUrl}}"], "path": ["communications", ":leadId", "history"], "variable": [{ "key": "leadId", "value": "lead-id-here" }] }
+          }
+        },
+        {
+          "name": "Communication Stats Overview",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/communications/stats/overview", "host": ["{{baseUrl}}"], "path": ["communications", "stats", "overview"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Overview (Dashboard)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/reports/overview", "host": ["{{baseUrl}}"], "path": ["reports", "overview"] }
+          }
+        },
+        {
+          "name": "Pipeline Report",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/reports/pipeline", "host": ["{{baseUrl}}"], "path": ["reports", "pipeline"] }
+          }
+        },
+        {
+          "name": "Team Productivity",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reports/productivity?from=2026-05-01&to=2026-05-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "productivity"],
+              "query": [
+                { "key": "from", "value": "2026-05-01", "description": "Start date (ISO 8601)" },
+                { "key": "to", "value": "2026-05-31", "description": "End date (ISO 8601)" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Source Performance",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/reports/source-performance", "host": ["{{baseUrl}}"], "path": ["reports", "source-performance"] }
+          }
+        },
+        {
+          "name": "Team Leaderboard",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/reports/team-leaderboard", "host": ["{{baseUrl}}"], "path": ["reports", "team-leaderboard"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/users", "host": ["{{baseUrl}}"], "path": ["users"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sales\",\n  \"email\": \"rahul.sales@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"SALES_REP\",\n  \"teamId\": \"team-id-here\"\n}"
+            },
+            "description": "Director/Manager only."
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/:id", "host": ["{{baseUrl}}"], "path": ["users", ":id"], "variable": [{ "key": "id", "value": "user-id-here" }] }
+          }
+        },
+        {
+          "name": "Deactivate User",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/users/:id", "host": ["{{baseUrl}}"], "path": ["users", ":id"], "variable": [{ "key": "id", "value": "user-id-here" }] },
+            "description": "Director only. Soft-deactivates the user."
+          }
+        },
+        {
+          "name": "List All Teams",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/teams/all", "host": ["{{baseUrl}}"], "path": ["users", "teams", "all"] }
+          }
+        },
+        {
+          "name": "Create Team",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/users/teams", "host": ["{{baseUrl}}"], "path": ["users", "teams"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"North India Sales\",\n  \"managerId\": \"manager-user-id-here\"\n}"
+            },
+            "description": "Director only."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Import Mappings",
+      "item": [
+        {
+          "name": "List Import Mappings",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/import-mappings", "host": ["{{baseUrl}}"], "path": ["import-mappings"] }
+          }
+        },
+        {
+          "name": "Create Import Mapping",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/import-mappings", "host": ["{{baseUrl}}"], "path": ["import-mappings"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Facebook Leads CSV\",\n  \"mapping\": {\n    \"Full Name\": \"name\",\n    \"Phone Number\": \"phone\",\n    \"Email Address\": \"email\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Import Mapping",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/import-mappings/:id", "host": ["{{baseUrl}}"], "path": ["import-mappings", ":id"], "variable": [{ "key": "id", "value": "mapping-id-here" }] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Facebook Leads CSV v2\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Import Mapping",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/import-mappings/:id", "host": ["{{baseUrl}}"], "path": ["import-mappings", ":id"], "variable": [{ "key": "id", "value": "mapping-id-here" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nurturing",
+      "item": [
+        {
+          "name": "Sequences",
+          "item": [
+            {
+              "name": "List Sequences",
+              "request": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences"] }
+              }
+            },
+            {
+              "name": "Create Sequence",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences"] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"New Lead Welcome Sequence\",\n  \"description\": \"7-day onboarding drip for fresh inquiries\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Get Sequence by ID",
+              "request": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences/:id", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences", ":id"], "variable": [{ "key": "id", "value": "sequence-id-here" }] }
+              }
+            },
+            {
+              "name": "Update Sequence",
+              "request": {
+                "method": "PATCH",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences/:id", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences", ":id"], "variable": [{ "key": "id", "value": "sequence-id-here" }] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Updated Sequence Name\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Delete Sequence",
+              "request": {
+                "method": "DELETE",
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences/:id", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences", ":id"], "variable": [{ "key": "id", "value": "sequence-id-here" }] }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Steps",
+          "item": [
+            {
+              "name": "Add Step to Sequence",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences/:id/steps", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences", ":id", "steps"], "variable": [{ "key": "id", "value": "sequence-id-here" }] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stepOrder\": 1,\n  \"type\": \"EMAIL\",\n  \"delayDays\": 0,\n  \"subject\": \"Welcome to GenX EdTech!\",\n  \"body\": \"Hi {{leadName}}, thanks for your inquiry...\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Update Step",
+              "request": {
+                "method": "PATCH",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": { "raw": "{{baseUrl}}/nurturing/steps/:stepId", "host": ["{{baseUrl}}"], "path": ["nurturing", "steps", ":stepId"], "variable": [{ "key": "stepId", "value": "step-id-here" }] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"delayDays\": 2,\n  \"subject\": \"Day 2: Our Top Courses\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Delete Step",
+              "request": {
+                "method": "DELETE",
+                "url": { "raw": "{{baseUrl}}/nurturing/steps/:stepId", "host": ["{{baseUrl}}"], "path": ["nurturing", "steps", ":stepId"], "variable": [{ "key": "stepId", "value": "step-id-here" }] }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Enrollments",
+          "item": [
+            {
+              "name": "Enroll Lead in Sequence",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": { "raw": "{{baseUrl}}/nurturing/sequences/:id/enroll", "host": ["{{baseUrl}}"], "path": ["nurturing", "sequences", ":id", "enroll"], "variable": [{ "key": "id", "value": "sequence-id-here" }] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"leadId\": \"lead-id-here\"\n}"
+                }
+              }
+            },
+            {
+              "name": "Remove Enrollment",
+              "request": {
+                "method": "DELETE",
+                "url": { "raw": "{{baseUrl}}/nurturing/enrollments/:eid", "host": ["{{baseUrl}}"], "path": ["nurturing", "enrollments", ":eid"], "variable": [{ "key": "eid", "value": "enrollment-id-here" }] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/payments", "host": ["{{baseUrl}}"], "path": ["payments"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leadId\": \"lead-id-here\",\n  \"amount\": 49999,\n  \"currency\": \"INR\",\n  \"gateway\": \"RAZORPAY\",\n  \"description\": \"Data Science Batch Fee\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Payments Dashboard",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/payments/dashboard", "host": ["{{baseUrl}}"], "path": ["payments", "dashboard"] }
+          }
+        },
+        {
+          "name": "Payments by Lead",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/payments/lead/:leadId", "host": ["{{baseUrl}}"], "path": ["payments", "lead", ":leadId"], "variable": [{ "key": "leadId", "value": "lead-id-here" }] }
+          }
+        },
+        {
+          "name": "Mark Payment as Paid",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/payments/:id/mark-paid", "host": ["{{baseUrl}}"], "path": ["payments", ":id", "mark-paid"], "variable": [{ "key": "id", "value": "payment-id-here" }] }
+          }
+        },
+        {
+          "name": "Payment Gateway Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-razorpay-signature", "value": "hmac-signature-here", "description": "Required for Razorpay" }
+            ],
+            "url": { "raw": "{{baseUrl}}/payments/webhook/:gateway", "host": ["{{baseUrl}}"], "path": ["payments", "webhook", ":gateway"], "variable": [{ "key": "gateway", "value": "razorpay" }] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"payment.captured\",\n  \"payload\": {\n    \"payment\": {\n      \"entity\": {\n        \"id\": \"pay_abc123\",\n        \"order_id\": \"order_xyz\",\n        \"amount\": 4999900,\n        \"status\": \"captured\"\n      }\n    }\n  }\n}"
+            },
+            "auth": { "type": "noauth" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "item": [
+        {
+          "name": "Get Plans",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/billing/plans", "host": ["{{baseUrl}}"], "path": ["billing", "plans"] }
+          }
+        },
+        {
+          "name": "Subscribe",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/billing/subscribe", "host": ["{{baseUrl}}"], "path": ["billing", "subscribe"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"planId\": \"STARTER_MONTHLY\",\n  \"seats\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Subscription",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/billing/subscription", "host": ["{{baseUrl}}"], "path": ["billing", "subscription"] }
+          }
+        },
+        {
+          "name": "Update Seats",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/billing/subscription/seats", "host": ["{{baseUrl}}"], "path": ["billing", "subscription", "seats"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"seats\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "Cancel Subscription",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/billing/subscription/cancel", "host": ["{{baseUrl}}"], "path": ["billing", "subscription", "cancel"] }
+          }
+        },
+        {
+          "name": "Purchase Add-on",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/billing/addon", "host": ["{{baseUrl}}"], "path": ["billing", "addon"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addonId\": \"extra-seats-5\",\n  \"quantity\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Billing History / Invoices",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/billing/invoices", "host": ["{{baseUrl}}"], "path": ["billing", "invoices"] }
+          }
+        },
+        {
+          "name": "Razorpay Billing Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-razorpay-signature", "value": "hmac-signature-here" }
+            ],
+            "url": { "raw": "{{baseUrl}}/billing/webhook", "host": ["{{baseUrl}}"], "path": ["billing", "webhook"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"subscription.activated\",\n  \"payload\": {\n    \"subscription\": {\n      \"entity\": {\n        \"id\": \"sub_abc123\",\n        \"status\": \"active\"\n      }\n    }\n  }\n}"
+            },
+            "auth": { "type": "noauth" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Integrations",
+      "item": [
+        {
+          "name": "Config",
+          "item": [
+            {
+              "name": "Get Integration Statuses",
+              "request": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/integrations/config", "host": ["{{baseUrl}}"], "path": ["integrations", "config"] },
+                "description": "Director/Manager only."
+              }
+            },
+            {
+              "name": "Init Facebook OAuth",
+              "request": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/integrations/config/facebook/oauth/init", "host": ["{{baseUrl}}"], "path": ["integrations", "config", "facebook", "oauth", "init"] },
+                "description": "Director/Manager only. Returns redirect URL."
+              }
+            },
+            {
+              "name": "Facebook OAuth Callback",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/integrations/config/facebook/oauth/callback?code=fb-auth-code&state=state-token",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["integrations", "config", "facebook", "oauth", "callback"],
+                  "query": [
+                    { "key": "code", "value": "fb-auth-code" },
+                    { "key": "state", "value": "state-token" }
+                  ]
+                },
+                "auth": { "type": "noauth" },
+                "description": "Called by Facebook after OAuth. No JWT needed."
+              }
+            },
+            {
+              "name": "Init Google OAuth",
+              "request": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/integrations/config/google/oauth/init", "host": ["{{baseUrl}}"], "path": ["integrations", "config", "google", "oauth", "init"] },
+                "description": "Director/Manager only."
+              }
+            },
+            {
+              "name": "Google OAuth Callback",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/integrations/config/google/oauth/callback?code=google-auth-code&state=state-token",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["integrations", "config", "google", "oauth", "callback"],
+                  "query": [
+                    { "key": "code", "value": "google-auth-code" },
+                    { "key": "state", "value": "state-token" }
+                  ]
+                },
+                "auth": { "type": "noauth" },
+                "description": "Called by Google after OAuth. No JWT needed."
+              }
+            },
+            {
+              "name": "Disconnect Provider",
+              "request": {
+                "method": "DELETE",
+                "url": { "raw": "{{baseUrl}}/integrations/config/:provider", "host": ["{{baseUrl}}"], "path": ["integrations", "config", ":provider"], "variable": [{ "key": "provider", "value": "facebook" }] },
+                "description": "Director/Manager only. provider = facebook | google"
+              }
+            },
+            {
+              "name": "Get Webhook Info",
+              "request": {
+                "method": "GET",
+                "url": { "raw": "{{baseUrl}}/integrations/config/webhook/info", "host": ["{{baseUrl}}"], "path": ["integrations", "config", "webhook", "info"] },
+                "description": "Director/Manager only."
+              }
+            },
+            {
+              "name": "Regenerate Webhook Secret",
+              "request": {
+                "method": "POST",
+                "url": { "raw": "{{baseUrl}}/integrations/config/webhook/regenerate-secret", "host": ["{{baseUrl}}"], "path": ["integrations", "config", "webhook", "regenerate-secret"] },
+                "description": "Director/Manager only."
+              }
+            }
+          ]
+        },
+        {
+          "name": "Facebook",
+          "item": [
+            {
+              "name": "Webhook Verify (Hub Challenge)",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/integrations/facebook/webhook?hub.mode=subscribe&hub.verify_token=genxcrm-fb-verify&hub.challenge=CHALLENGE_CODE",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["integrations", "facebook", "webhook"],
+                  "query": [
+                    { "key": "hub.mode", "value": "subscribe" },
+                    { "key": "hub.verify_token", "value": "genxcrm-fb-verify" },
+                    { "key": "hub.challenge", "value": "CHALLENGE_CODE" }
+                  ]
+                },
+                "auth": { "type": "noauth" }
+              }
+            },
+            {
+              "name": "Webhook Event (Lead Generated)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Content-Type", "value": "application/json" },
+                  { "key": "x-hub-signature-256", "value": "sha256=hmac-signature-here" }
+                ],
+                "url": { "raw": "{{baseUrl}}/integrations/facebook/webhook", "host": ["{{baseUrl}}"], "path": ["integrations", "facebook", "webhook"] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"object\": \"page\",\n  \"entry\": [\n    {\n      \"id\": \"page-id\",\n      \"changes\": [\n        {\n          \"field\": \"leadgen\",\n          \"value\": {\n            \"leadgen_id\": \"123456789\",\n            \"page_id\": \"page-id\",\n            \"form_id\": \"form-id\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+                },
+                "auth": { "type": "noauth" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Google",
+          "item": [
+            {
+              "name": "Google Forms Webhook",
+              "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": { "raw": "{{baseUrl}}/integrations/google/:orgToken/webhook", "host": ["{{baseUrl}}"], "path": ["integrations", "google", ":orgToken", "webhook"], "variable": [{ "key": "orgToken", "value": "{{orgToken}}" }] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Ankit Kumar\",\n  \"email\": \"ankit@example.com\",\n  \"phone\": \"+919988776655\",\n  \"courseInterest\": \"MBA Prep\"\n}"
+                },
+                "auth": { "type": "noauth" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Generic Webhook",
+          "item": [
+            {
+              "name": "Ingest Lead via Webhook",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Content-Type", "value": "application/json" },
+                  { "key": "x-genxcrm-signature", "value": "sha256=hmac-signature-here", "description": "HMAC-SHA256 of request body using webhook secret" }
+                ],
+                "url": { "raw": "{{baseUrl}}/integrations/webhook/:orgToken/ingest", "host": ["{{baseUrl}}"], "path": ["integrations", "webhook", ":orgToken", "ingest"], "variable": [{ "key": "orgToken", "value": "{{orgToken}}" }] },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Rohan Verma\",\n  \"email\": \"rohan@example.com\",\n  \"phone\": \"+919876500001\",\n  \"source\": \"WEBHOOK\"\n}"
+                },
+                "auth": { "type": "noauth" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

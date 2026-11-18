@@ -1,0 +1,53 @@
+node_modules/
+dist/
+.env
+*.local
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Coverage and test reports
+coverage/
+coverage-summary.json
+frontend/reports/
+backend/reports/
+design_handoff_genxcrm_ui/
+
+temp/
+# dev runner PID file
+.dev-pids.json
+
+# Git worktrees used for isolated feature work
+.worktrees/
+
+# Android release signing — never commit the keystore or its credentials
+frontend/android/keystore.properties
+*.keystore
+*.jks
+
+# Compiled TS output emitted alongside source (tsc without noEmit)
+frontend/src/**/*.js
+
+# Environment files (build-time, not source)
+.env.*
+!.env.example
+
+# Playwright E2E — saved auth sessions, run artifacts, reports
+e2e/.auth/
+e2e/test-results/
+e2e/playwright-report/
+
+# Dev server run logs
+dev-server.log
+
+# Android Studio / IntelliJ project state, debug build artifacts
+frontend/android/.idea/
+frontend/android/app/src/debug/
+
+# Meta App Review screencasts/screenshots and other doc assets — large binaries, not needed by anyone cloning the repo
+docs/images/
+
+creds.txt
+
+# Personal scratch notes, not shared project docs
+TODO.md

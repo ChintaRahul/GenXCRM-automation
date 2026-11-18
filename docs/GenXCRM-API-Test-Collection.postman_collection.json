@@ -1,0 +1,1293 @@
+{
+  "info": {
+    "name": "GenXCRM Manufacturing - API test cases",
+    "description": "Runs the API-only steps of the manual test sheet. Set collection variables base, email, password then run folder 0 first, then any other folder (or Run collection). Every request carries Postman tests, so the Test Results tab shows Pass/Fail. Requests marked [WRITES DATA] change records - use throwaway data.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base",
+      "value": "https://api.genxcrm.co.in/api/v1"
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "opp",
+      "value": ""
+    },
+    {
+      "key": "receivedMilestone",
+      "value": ""
+    },
+    {
+      "key": "renewedCoverage",
+      "value": ""
+    },
+    {
+      "key": "openTicket",
+      "value": ""
+    },
+    {
+      "key": "orgToken",
+      "value": "",
+      "description": "Org webhook token from Administration > Integrations > Webhook (the part in the ingest URL)."
+    },
+    {
+      "key": "webhookSecret",
+      "value": "",
+      "description": "Signing secret of that webhook. Leave empty only if none is configured."
+    },
+    {
+      "key": "otherOrgToken",
+      "value": "",
+      "description": "Bearer token of a user in a DIFFERENT org (log in there and paste the token)."
+    },
+    {
+      "key": "otherOrgOppId",
+      "value": "",
+      "description": "An opportunity id that belongs to the different org."
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Setup (run first)",
+      "description": "Log in as the role the test case names (change email/password for each role) and pick records to test against. Needs: an opportunity, a Received payment milestone, a Renewed coverage and an Open service ticket in the org.",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set('token', j.token || j.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/auth/login",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{email}}\",\"password\":\"{{password}}\"}"
+            }
+          }
+        },
+        {
+          "name": "Pick an open opportunity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rows = (pm.response.json().data || []);",
+                  "const hit = rows.find(o => !['Won','Lost'].includes(o.stage));",
+                  "pm.test('found a record for opp', () => pm.expect(hit, 'No matching record in this org - see the folder description').to.exist);",
+                  "if (hit) pm.collectionVariables.set('opp', hit.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps?limit=100",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps?limit=100"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pick a Received payment milestone",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rows = (pm.response.json().data || []);",
+                  "const hit = rows.find(m => m.status === 'Received');",
+                  "pm.test('found a record for receivedMilestone', () => pm.expect(hit, 'No matching record in this org - see the folder description').to.exist);",
+                  "if (hit) pm.collectionVariables.set('receivedMilestone', hit.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/payments?limit=200",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "payments?limit=200"
+              ]
+            },
+            "description": "Log in as Accounts (or Super Admin)."
+          }
+        },
+        {
+          "name": "Pick a Renewed coverage",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rows = (pm.response.json().data || []);",
+                  "const hit = rows.find(c => c.status === 'Renewed');",
+                  "pm.test('found a record for renewedCoverage', () => pm.expect(hit, 'No matching record in this org - see the folder description').to.exist);",
+                  "if (hit) pm.collectionVariables.set('renewedCoverage', hit.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/amc?limit=100",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "amc?limit=100"
+              ]
+            },
+            "description": "Log in as Service Manager (or Super Admin)."
+          }
+        },
+        {
+          "name": "Pick an Open service ticket",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const rows = (pm.response.json().data || []);",
+                  "const hit = rows.find(t => t.status === 'Open');",
+                  "pm.test('found a record for openTicket', () => pm.expect(hit, 'No matching record in this org - see the folder description').to.exist);",
+                  "if (hit) pm.collectionVariables.set('openTicket', hit.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/service?limit=100",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "service?limit=100"
+              ]
+            },
+            "description": "Log in as Service Manager (or Super Admin)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-OPP-006  Won/Lost only via actions",
+      "description": "Log in as Sales Executive.",
+      "item": [
+        {
+          "name": "5. PATCH stage = Won",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('message mentions: Use the \\'Mark won\\'/\\'Mark lost\\' actions', () => pm.expect(pm.response.text()).to.include(\"Use the 'Mark won'/'Mark lost' actions\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps/{{opp}}",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps",
+                "{{opp}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"Won\"\n}"
+            }
+          }
+        },
+        {
+          "name": "6. PATCH stage = Lost",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('message mentions: Use the \\'Mark won\\'/\\'Mark lost\\' actions', () => pm.expect(pm.response.text()).to.include(\"Use the 'Mark won'/'Mark lost' actions\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps/{{opp}}",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps",
+                "{{opp}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stage\": \"Lost\"\n}"
+            }
+          }
+        },
+        {
+          "name": "7. GET opportunity - stage unchanged",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200', () => pm.response.to.have.status(200));",
+                  "pm.test('stage is not Won/Lost', () => pm.expect(['Won','Lost']).to.not.include(pm.response.json().stage));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps/{{opp}}",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps",
+                "{{opp}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-PAY-005 / TC-PAY-009  Received milestone",
+      "description": "Log in as Accounts.",
+      "item": [
+        {
+          "name": "PAY-005 Record receipt on a Received milestone",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('message mentions: already Received', () => pm.expect(pm.response.text()).to.include(\"already Received\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/payments/{{receivedMilestone}}/actions",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "payments",
+                "{{receivedMilestone}}",
+                "actions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Record receipt\",\n  \"amt\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "PAY-009 Send reminder on a Received milestone",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('message mentions: already Received', () => pm.expect(pm.response.text()).to.include(\"already Received\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/payments/{{receivedMilestone}}/actions",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "payments",
+                "{{receivedMilestone}}",
+                "actions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Send reminder\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-AMC-006  Renewal on a Renewed coverage",
+      "description": "Log in as Service Manager.",
+      "item": [
+        {
+          "name": "Create renewal opportunity on a Renewed coverage",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('message mentions: Cannot create a renewal opportunity for a coverage in status \\'Renewed\\'', () => pm.expect(pm.response.text()).to.include(\"Cannot create a renewal opportunity for a coverage in status 'Renewed'\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/amc/{{renewedCoverage}}/actions",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "amc",
+                "{{renewedCoverage}}",
+                "actions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Create renewal opportunity\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-SVC-008  Close from Open",
+      "description": "Log in as Service Manager.",
+      "item": [
+        {
+          "name": "Close an Open ticket",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('message mentions: Cannot Close a service ticket in status \\'Open\\'', () => pm.expect(pm.response.text()).to.include(\"Cannot Close a service ticket in status 'Open'\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/service/{{openTicket}}/actions",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "service",
+                "{{openTicket}}",
+                "actions"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Close\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-SEC-003 / TC-E2E-008  Authorization on endpoints",
+      "description": "SEC-003: no token = 401; forbidden role = 403. Log in as Sales Executive for the 403 / cost checks.",
+      "item": [
+        {
+          "name": "No token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Bad token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "not-a-real-token",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sales Exec reads Costing -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/costing",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "costing"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sales Exec reads Approval rules -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/approvalRules",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "approvalRules"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-SEC-004 / TC-E2E-008  No cost fields in API",
+      "description": "Log in as Sales Executive. Fails if any cost / margin / minimum-price key appears.",
+      "item": [
+        {
+          "name": "Products list has no cost fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const bad = ['cost','minPrice','stdCost','standardCost','margin','gm','gmPct'];",
+                  "const keys = new Set((pm.response.json().data || []).flatMap(r => Object.keys(r)));",
+                  "pm.test('no restricted keys: ' + bad.filter(k => keys.has(k)).join(','), () => bad.forEach(k => pm.expect(keys.has(k), k).to.be.false));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/products?limit=50",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "products?limit=50"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Opportunities list has no cost fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const bad = ['cost','minPrice','stdCost','margin','gm','gmPct'];",
+                  "const keys = new Set((pm.response.json().data || []).flatMap(r => Object.keys(r)));",
+                  "pm.test('no restricted keys', () => bad.forEach(k => pm.expect(keys.has(k), k).to.be.false));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps?limit=50",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps?limit=50"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Quotations list has no cost fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const bad = ['cost','minPrice','stdCost','margin','gm','gmPct'];",
+                  "const keys = new Set((pm.response.json().data || []).flatMap(r => Object.keys(r)));",
+                  "pm.test('no restricted keys', () => bad.forEach(k => pm.expect(keys.has(k), k).to.be.false));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/quotes?limit=50",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "quotes?limit=50"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-ADM-003  API create blocked after removing permission",
+      "description": "In Administration > Roles & Permissions untick Sales Executive > Leads > Create, then log in as Sales Executive and run this. Re-tick Create afterwards.",
+      "item": [
+        {
+          "name": "POST lead as Sales Exec -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/leads",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "leads"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"API perm test\",\n  \"phone\": \"9000000001\",\n  \"source\": \"Website\"\n}"
+            },
+            "description": "[WRITES DATA only if the permission was NOT removed - then delete the lead.]"
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-SEC-001 / TC-SEC-002  Cross-tenant",
+      "description": "Set otherOrgToken (a user of a different org) and otherOrgOppId (a record of that org). Run as the main org (token from folder 0).",
+      "item": [
+        {
+          "name": "SEC-001 read other org record -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps/{{otherOrgOppId}}",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps",
+                "{{otherOrgOppId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "SEC-001 list never contains it",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const ids = (pm.response.json().data || []).map(o => o.id);",
+                  "pm.test('other-org id absent', () => pm.expect(ids).to.not.include(pm.collectionVariables.get('otherOrgOppId')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps?limit=200",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps?limit=200"
+              ]
+            }
+          }
+        },
+        {
+          "name": "SEC-002 create activity referencing other-org opportunity -> rejected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"rejected (400/404)\", () => pm.expect([400,404]).to.include(pm.response.code));",
+                  "pm.test(\"not found\", () => pm.expect(pm.response.text()).to.match(/not found/i));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/activities",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "activities"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"Call\",\n  \"subject\": \"cross-tenant test\",\n  \"priority\": \"Medium\",\n  \"opportunityId\": \"{{otherOrgOppId}}\"\n}"
+            },
+            "description": "If this returns 201 the foreign id was accepted - log a defect."
+          }
+        },
+        {
+          "name": "SEC-002 other org cannot patch our opportunity -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{otherOrgToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/modules/opps/{{opp}}",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "modules",
+                "opps",
+                "{{opp}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"cross-tenant write\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-TEAM-005 / TC-TEAM-006  Webhook signature and retry",
+      "description": "Set orgToken and webhookSecret. Signature = HMAC-SHA256 hex of the raw body, sent as x-webhook-signature: sha256=<hex>. NOTE: if the org has no webhook secret configured, the endpoint accepts every request (by design), so TEAM-006 only applies when a secret is set. [WRITES DATA] creates one lead tagged api-test.",
+      "item": [
+        {
+          "name": "TEAM-006 missing signature -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/integrations/webhook/{{orgToken}}/ingest",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "integrations",
+                "webhook",
+                "{{orgToken}}",
+                "ingest"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"API Sig Test\",\n  \"phone\": \"9000011111\",\n  \"product\": \"Weighbridge\",\n  \"source\": \"Website\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TEAM-006 wrong signature -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-webhook-signature",
+                "value": "sha256=deadbeef"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/integrations/webhook/{{orgToken}}/ingest",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "integrations",
+                "webhook",
+                "{{orgToken}}",
+                "ingest"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"API Sig Test\",\n  \"phone\": \"9000011111\",\n  \"product\": \"Weighbridge\",\n  \"source\": \"Website\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TEAM-005 first delivery -> lead created",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.request.body.raw;",
+                  "const h = CryptoJS.HmacSHA256(body, pm.collectionVariables.get('webhookSecret'));",
+                  "pm.variables.set('sig', 'sha256=' + h.toString(CryptoJS.enc.Hex));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,299));",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set('webhookLeadId', j.id || j.leadId || '');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-webhook-signature",
+                "value": "{{sig}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/integrations/webhook/{{orgToken}}/ingest",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "integrations",
+                "webhook",
+                "{{orgToken}}",
+                "ingest"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"external_id\":\"api-test-001\",\"name\":\"API Webhook Test\",\"phone\":\"9000022222\",\"email\":\"api-webhook-test@example.com\",\"product\":\"Weighbridge\",\"source\":\"Website\"}"
+            }
+          }
+        },
+        {
+          "name": "TEAM-005 same payload again -> duplicate, no new lead",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.request.body.raw;",
+                  "const h = CryptoJS.HmacSHA256(body, pm.collectionVariables.get('webhookSecret'));",
+                  "pm.variables.set('sig', 'sha256=' + h.toString(CryptoJS.enc.Hex));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const j = pm.response.json();",
+                  "pm.test('duplicate: true', () => pm.expect(j.duplicate).to.be.true);",
+                  "pm.test('same lead id', () => pm.expect(j.leadId).to.eql(pm.collectionVariables.get('webhookLeadId')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-webhook-signature",
+                "value": "{{sig}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/integrations/webhook/{{orgToken}}/ingest",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "integrations",
+                "webhook",
+                "{{orgToken}}",
+                "ingest"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"external_id\":\"api-test-001\",\"name\":\"API Webhook Test\",\"phone\":\"9000022222\",\"email\":\"api-webhook-test@example.com\",\"product\":\"Weighbridge\",\"source\":\"Website\"}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TC-SEC-006  Login rate limit",
+      "description": "DO NOT run against prod. Login is limited to 10 calls a minute per IP; run this on local/staging (or with the owner present). Send the request 11 times in a minute (Runner, iterations = 12, no delay).",
+      "item": [
+        {
+          "name": "Login with a wrong password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('401 until the limit, then 429', () => pm.expect([401,429]).to.include(pm.response.code));",
+                  "const n = Number(pm.collectionVariables.get('loginTries') || 0) + 1;",
+                  "pm.collectionVariables.set('loginTries', n);",
+                  "if (n > 10) pm.test('429 after 10 attempts', () => pm.response.to.have.status(429));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base}}/auth/login",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nobody@example.com\",\n  \"password\": \"wrong\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

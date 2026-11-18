@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/png" href="/logo-mark-x.png" />
+    <title>GenX CRM</title>
+    <meta name="description" content="GenXCRM — a purpose-built CRM for EdTech businesses. Capture, assign, and close leads from Meta Ads, Google Ads, and more." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="fb:app_id" content="%VITE_FACEBOOK_APP_ID%" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="%VITE_WEB_APP_URL%/" />
+    <meta property="og:title" content="GenX CRM" />
+    <meta property="og:description" content="A purpose-built CRM for EdTech businesses — capture, assign, and close leads across every channel." />
+    <meta property="og:image" content="%VITE_WEB_APP_URL%/logo-mark.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="GenX CRM" />
+    <meta name="twitter:description" content="A purpose-built CRM for EdTech businesses — capture, assign, and close leads across every channel." />
+    <meta name="twitter:image" content="%VITE_WEB_APP_URL%/logo-mark.png" />
+
+    <!-- Meta Pixel — no-op when VITE_FACEBOOK_PIXEL_ID is unset (e.g. local dev),
+         since the literal "%VITE_FACEBOOK_PIXEL_ID%" placeholder is left unsubstituted. -->
+    <script>
+      (function () {
+        var PIXEL_ID = "%VITE_FACEBOOK_PIXEL_ID%";
+        if (!PIXEL_ID || PIXEL_ID.charAt(0) === "%") return;
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod
+              ? n.callMethod.apply(n, arguments)
+              : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = !0;
+          n.version = "2.0";
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = !0;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s);
+        })(
+          window,
+          document,
+          "script",
+          "https://connect.facebook.net/en_US/fbevents.js",
+        );
+        fbq("init", PIXEL_ID);
+        fbq("track", "PageView");
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a0d14">
+        <svg width="56" height="56" viewBox="0 0 50 50" style="animation:genx-spin 1.05s linear infinite">
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#1a2030" stroke-width="5" />
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#14c2b6" stroke-width="5" stroke-linecap="round" stroke-dasharray="90 200" />
+        </svg>
+      </div>
+    </div>
+    <style>@keyframes genx-spin{to{transform:rotate(360deg)}}</style>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

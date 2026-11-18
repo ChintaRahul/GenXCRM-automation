@@ -1,0 +1,14 @@
+-- The prior migration added Lead.activityAt with DEFAULT CURRENT_TIMESTAMP. For an
+-- ALTER TABLE ADD COLUMN, Postgres evaluates that default ONCE per statement and backfills
+-- every existing row with that single instant — not each row's own createdAt. Every
+-- pre-existing lead ended up with the same activityAt (the migration's run time), which
+-- ties them all together and breaks "newest first" ordering (now effectively arbitrary
+-- DB order instead of createdAt-descending).
+--
+-- Backfill activityAt back to createdAt for every row so history is preserved. This is
+-- safe to run any time after the previous migration: activityAt is only otherwise touched
+-- by a genuine resubmission (LeadsService.create()/FacebookService.ingestLead()), so a
+-- lead resubmitted in the narrow window between the two migrations simply loses that
+-- "just resurfaced" signal and reverts to createdAt ordering — it will resurface correctly
+-- on its next resubmission.
+UPDATE "Lead" SET "activityAt" = "createdAt";

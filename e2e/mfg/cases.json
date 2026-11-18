@@ -1,0 +1,6491 @@
+[
+ {
+  "id": "TC-ENV-001",
+  "module": "ENV",
+  "title": "Manufacturing workspace shows manufacturing sidebar",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§35 / Flow: Workspace",
+  "pre": "Org with workspaceType = Manufacturing exists; user can log in.",
+  "steps": [
+   "Log in as the org admin.",
+   "Observe the sidebar."
+  ],
+  "expected": "Sidebar lists manufacturing sections (Leads, Accounts, Contacts, Opportunities, Activities, RFQs, Site visits, Demos, Products, Costing, Quotations, Approvals, Purchase orders, Sales orders, Dispatch, Payments, Installed assets, AMC, Service, Reports …). EdTech-only items are not shown.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-002",
+  "module": "ENV",
+  "title": "Login with valid credentials",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Any",
+  "ref": "§27 Authentication",
+  "pre": "Active user exists.",
+  "steps": [
+   "Open login page.",
+   "Enter valid email + password.",
+   "Submit."
+  ],
+  "expected": "User lands on dashboard; JWT issued; logout is available.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-003",
+  "module": "ENV",
+  "title": "Login with wrong password",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Any",
+  "ref": "§27 Authentication",
+  "pre": "Active user exists.",
+  "steps": [
+   "Enter valid email and a wrong password.",
+   "Submit."
+  ],
+  "expected": "Login rejected with a generic error; no session created; no information about which field was wrong.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-004",
+  "module": "ENV",
+  "title": "MFA challenge (when enabled)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Any",
+  "ref": "§27 Authentication",
+  "pre": "MFA enabled for the user.",
+  "steps": [
+   "Log in with valid credentials.",
+   "Enter the 6-digit TOTP code."
+  ],
+  "expected": "MFA challenge screen appears after password; correct code grants access, wrong code is rejected.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-ENV-005",
+  "module": "ENV",
+  "title": "Sales Executive sees only permitted modules",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Role-based access",
+  "pre": "Default role-permission matrix seeded.",
+  "steps": [
+   "Log in as Sales Executive.",
+   "Open each sidebar section."
+  ],
+  "expected": "Sales Executive can Create/Read/Update leads, accounts, contacts, activities, opportunities, visits, demos, quotations; read-only on RFQs, products, approvals, POs, orders, dispatch, payments, assets, AMC, service; Reports = read+export. Costing is not visible/accessible.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-006",
+  "module": "ENV",
+  "title": "Application Engineer module access",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Application Engineer",
+  "ref": "§27 Role-based access",
+  "pre": "Default matrix.",
+  "steps": [
+   "Log in as Application Engineer.",
+   "Open RFQs, Site visits, Demos, Opportunities, Costing."
+  ],
+  "expected": "CRU on RFQs, Site visits, Demos, Activities; read-only on Opportunities, Accounts, Contacts, Products, Service, Assets; no access to Costing/Quotations.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-007",
+  "module": "ENV",
+  "title": "Commercial / Estimation module access",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§27 Role-based access",
+  "pre": "Default matrix.",
+  "steps": [
+   "Log in as Commercial.",
+   "Open Costing, Quotations, Approvals, Products, POs."
+  ],
+  "expected": "Full CRUD+Export on Costing, Quotations, Approvals, Products; CRU on POs; read on Opportunities, RFQs, Accounts.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-008",
+  "module": "ENV",
+  "title": "Operations module access",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Operations",
+  "ref": "§27 Role-based access",
+  "pre": "Default matrix.",
+  "steps": [
+   "Log in as Operations.",
+   "Open Sales orders, Dispatch, POs, Payments, Costing."
+  ],
+  "expected": "Read+Update on Sales orders and Dispatch; read on POs, Accounts, Products, Assets; no access to Payments or Costing.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-009",
+  "module": "ENV",
+  "title": "Accounts role module access",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Accounts",
+  "ref": "§27 Role-based access",
+  "pre": "Default matrix.",
+  "steps": [
+   "Log in as Accounts.",
+   "Open Payments, Sales orders, POs, Dispatch, Leads."
+  ],
+  "expected": "Read/Update/Export on Payments; read on Sales orders, POs, Accounts, Dispatch; Reports read+export; no access to Leads.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-010",
+  "module": "ENV",
+  "title": "Service roles module access",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Service Engineer",
+  "ref": "§27 Role-based access",
+  "pre": "Default matrix.",
+  "steps": [
+   "Log in as Service Engineer.",
+   "Open Service, Assets, AMC, Accounts, Opportunities."
+  ],
+  "expected": "Read+Update on Service tickets; read on Assets, AMC, Accounts; no access to Opportunities. Service Manager additionally has full CRUD+Export on Service/Assets/AMC.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-011",
+  "module": "ENV",
+  "title": "Record access: Own vs Team vs All",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive / Sales Manager / Director",
+  "ref": "§27 Hierarchy access",
+  "pre": "Two Sales Executives (A, B) under one Manager each own leads/opps.",
+  "steps": [
+   "Log in as A; list leads and opportunities.",
+   "Log in as Manager; repeat.",
+   "Log in as Director; repeat."
+  ],
+  "expected": "A sees only own records; Manager sees team records; Director/Super Admin sees all records of the org.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-012",
+  "module": "ENV",
+  "title": "Direct URL to a restricted module",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Role-based access",
+  "pre": "Logged in as Sales Executive.",
+  "steps": [
+   "Manually type the URL of Costing (/costing) or its detail page."
+  ],
+  "expected": "Restricted-module access banner/403 is shown; no cost data is displayed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-013",
+  "module": "ENV",
+  "title": "Detail pages show 360° tabs",
+  "type": "UI/UX",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§35 UX",
+  "pre": "Account and Opportunity with related data exist.",
+  "steps": [
+   "Open an Account detail.",
+   "Open an Opportunity detail."
+  ],
+  "expected": "Account tabs: Overview, Plants, Contacts, Opportunities, Quotations, Orders, Installed assets, Service, Payments, Activities. Opportunity tabs: Overview, Stage history, Contacts, Activities, Requirements, Visits, Demos & trials, Costing, Quotations, PO / Orders. Each tab loads related records without error.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-014",
+  "module": "ENV",
+  "title": "Logout and token expiry",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Any",
+  "ref": "§27 Session",
+  "pre": "Logged in.",
+  "steps": [
+   "Click logout.",
+   "Press browser Back / call an API with the old token."
+  ],
+  "expected": "Session ends; protected pages redirect to login; old token is rejected (401).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENV-015",
+  "module": "ENV",
+  "title": "Forgot / reset password",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Any",
+  "ref": "§27 Password",
+  "pre": "Registered email.",
+  "steps": [
+   "Use 'Forgot password'.",
+   "Open the emailed link and set a new password.",
+   "Log in with new password."
+  ],
+  "expected": "Reset email delivered; link works once; new password accepted; old password stops working.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-LEAD-001",
+  "module": "LEAD",
+  "title": "Create a lead with all mandatory fields",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 / Flow P1",
+  "pre": "Logged in as Sales Executive.",
+  "steps": [
+   "Leads → New lead.",
+   "Fill company, contact name, phone, email, product, source, city/state, estimated value, next action + date.",
+   "Save."
+  ],
+  "expected": "Lead created with status 'New', owner = creator, createdAt set. SLA-01 'Lead first response' timer starts. Lead appears in list.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-002",
+  "module": "LEAD",
+  "title": "Create lead with missing mandatory fields",
+  "type": "Validation",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Validation",
+  "pre": "Logged in.",
+  "steps": [
+   "Open New lead.",
+   "Leave company/contact/phone blank and Save."
+  ],
+  "expected": "Form blocks save with field-level validation messages; nothing is created.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-003",
+  "module": "LEAD",
+  "title": "All 14 lead sources selectable",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§5 Sources",
+  "pre": "Master 'sources' seeded.",
+  "steps": [
+   "Open New lead and open the Source dropdown."
+  ],
+  "expected": "Dropdown lists: Website, Google Ads, Meta, IndiaMART, TradeIndia, Exhibition, Referral, LinkedIn, WhatsApp, Email, Dealer, Cold calling, Existing customer, Manual / API. Dropdown scrolls and does not overflow the dialog.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-004",
+  "module": "LEAD",
+  "title": "Duplicate phone/email/company on lead creation",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Duplicate detection / Flow: Duplicate check",
+  "pre": "Lead exists with phone 9876543210, email buyer@shreesteel.in, company 'Shree Steel Pvt Ltd'.",
+  "steps": [
+   "Create another lead with the same phone (or email, or company name)."
+  ],
+  "expected": "Spec: system warns before save and offers link/merge path (§37 'Lead duplicate'). Flow chart: 'Duplicate → Merge existing lead'.",
+  "build": "Partial",
+  "verification": "CORRECTED",
+  "verificationNote": "The create form does warn: on blur it searches the list for the first filled duplicate key (leads: phone, email, company) and shows 'A matching lead already exists. Open existing'. It does not block saving and there is no merge; the backend still creates the duplicate (live API: two leads, 201/201). So: UI warning + link = built; server-side enforcement and merge = missing.",
+  "note": "Code review: MfgLeadsService.create() has no dedupe; duplicate checks exist only at conversion (account name/GSTIN, contact phone/email). Log as defect if a second record is silently created.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-005",
+  "module": "LEAD",
+  "title": "Lead owner assignment (manual)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§5 Assignment / Flow: Assigned",
+  "pre": "Manager logged in; team members exist.",
+  "steps": [
+   "Create lead and choose another owner.",
+   "Save.",
+   "Log in as that owner."
+  ],
+  "expected": "Owner saved; lead visible to the assigned owner; creator-role without cross-owner permission is forced to own the lead.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-006",
+  "module": "LEAD",
+  "title": "Automatic assignment (round-robin / territory / product / industry)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§5 Assignment rules",
+  "pre": "Assignment rule configured (if any) for Manufacturing leads.",
+  "steps": [
+   "Create several leads without choosing an owner.",
+   "Check the owner of each."
+  ],
+  "expected": "Spec: leads auto-assigned by configured rule. Flow chart: 'Assigned · 1h SLA'.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "A lead created without ownerId was owned by the caller; MfgLeadsService has no assignment-rule code.",
+  "note": "Manufacturing leads currently default owner to the creator; rule-based assignment found only in the EdTech assignments module. Verify and record.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-007",
+  "module": "LEAD",
+  "title": "Mark contacted (New → Contacted)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Status flow",
+  "pre": "Lead in status New.",
+  "steps": [
+   "Open lead.",
+   "Click 'Mark contacted'."
+  ],
+  "expected": "Status = Contacted; SLA-01 first-response timer stops; SLA-02 'Qualification decision' timer starts.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-008",
+  "module": "LEAD",
+  "title": "Mark contacted from invalid status",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§5 Status flow",
+  "pre": "Lead in status Qualified.",
+  "steps": [
+   "Try 'Mark contacted' (API or UI)."
+  ],
+  "expected": "Rejected: \"Cannot Mark contacted a lead in status 'Qualified'.\" Status unchanged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-009",
+  "module": "LEAD",
+  "title": "Qualify a lead (Contacted → Qualified)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Status flow",
+  "pre": "Lead in status Contacted (also test Follow-up and Nurture).",
+  "steps": [
+   "Click 'Qualify'."
+  ],
+  "expected": "Status = Qualified; 'Convert to opportunity' button becomes available; SLA-02 timer stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-010",
+  "module": "LEAD",
+  "title": "BANT captured before Qualified",
+  "type": "Validation",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§5 Qualification form / Flow: Qualify · BANT",
+  "pre": "Lead in Contacted with empty Qualification section.",
+  "steps": [
+   "Open Qualification tab; leave Budget/Authority/Need/Timeline empty.",
+   "Click Qualify."
+  ],
+  "expected": "Spec/flow: Budget, Authority, Need, Timeline must be captured before Qualified.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Qualification tab exists, but the Qualify action has no required-field guard in code. Confirm whether the UI enforces it; otherwise log as gap.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-011",
+  "module": "LEAD",
+  "title": "Move to nurture (Contacted/Follow-up → Nurture)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§5 Status flow",
+  "pre": "Lead in Contacted.",
+  "steps": [
+   "Click 'Move to nurture'."
+  ],
+  "expected": "Status = Nurture; lead can later be re-qualified (Nurture → Qualified). Not allowed from New/Assigned/Qualified.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-012",
+  "module": "LEAD",
+  "title": "Disqualify with reason",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 / Flow: Disqualify",
+  "pre": "Lead in any open status.",
+  "steps": [
+   "Click Disqualify.",
+   "Enter reason (e.g. Budget) and confirm."
+  ],
+  "expected": "Status = Disqualified; reason stored; lead removed from active views.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-013",
+  "module": "LEAD",
+  "title": "Disqualify without reason is blocked",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 / Flow: Disqualify",
+  "pre": "Lead in Contacted.",
+  "steps": [
+   "Click Disqualify and submit with empty reason."
+  ],
+  "expected": "Rejected: \"'disq' is required to Disqualify.\" (UI should require the reason field). Status unchanged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-014",
+  "module": "LEAD",
+  "title": "Disqualify an already Qualified lead",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§5 Disqualify rules",
+  "pre": "Lead in Qualified.",
+  "steps": [
+   "Attempt Disqualify."
+  ],
+  "expected": "Rejected: Disqualify only allowed from New, Assigned, Contacted, Follow-up, Nurture.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-015",
+  "module": "LEAD",
+  "title": "Convert qualified lead → new Account + Contact + Opportunity",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Conversion",
+  "pre": "Lead Qualified; company not present in Accounts.",
+  "steps": [
+   "Click 'Convert to opportunity'.",
+   "Choose 'Create new account'; select type, industry, territory, GSTIN.",
+   "Select contact buying role.",
+   "Confirm."
+  ],
+  "expected": "Account, Contact and Opportunity (stage 'Qualified', 10%) created in one transaction; opportunity title '<Company> — <Product>'; close date ≈ +90 days; next action 'Follow up after conversion' ≈ +7 days; lead status = Converted; all records linked; owner carried over.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-016",
+  "module": "LEAD",
+  "title": "Convert requires contact buying role",
+  "type": "Validation",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Conversion",
+  "pre": "Lead Qualified.",
+  "steps": [
+   "Start conversion; leave buying role empty; confirm."
+  ],
+  "expected": "Rejected: \"'contactRole' is required to convert a lead.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-017",
+  "module": "LEAD",
+  "title": "Convert requires account type/industry/territory for new account",
+  "type": "Validation",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§5 Conversion",
+  "pre": "Lead Qualified.",
+  "steps": [
+   "Choose 'new account' but leave industry/territory blank; confirm."
+  ],
+  "expected": "Rejected with message naming account.type, account.industry and account.territory as required.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-018",
+  "module": "LEAD",
+  "title": "Convert when account already exists (name match)",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§32 Conversion / Flow: Account dedupe",
+  "pre": "Account 'Shree Steel Pvt. Ltd.' exists. Lead company 'Shree Steel Private Limited'.",
+  "steps": [
+   "Convert lead choosing 'create new account'."
+  ],
+  "expected": "No duplicate account created. Response flags duplicate and returns existing account; UI shows 'Open existing' / link option. Name normalisation ignores Pvt/Ltd/LLP/Inc/Corp and punctuation.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-019",
+  "module": "LEAD",
+  "title": "Convert when GSTIN already exists",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§32 Conversion",
+  "pre": "Account with GSTIN 27AABCS1234A1Z5 exists under a different name.",
+  "steps": [
+   "Convert lead with new account using the same GSTIN."
+  ],
+  "expected": "Duplicate flagged by GSTIN; no new account created.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-020",
+  "module": "LEAD",
+  "title": "Convert onto an existing account — contact duplicate",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§32 Conversion",
+  "pre": "Account exists and has a contact with the lead's phone/email.",
+  "steps": [
+   "Convert choosing the existing account (no contactId)."
+  ],
+  "expected": "Duplicate contact flagged (existingContactId returned); no second contact created.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-021",
+  "module": "LEAD",
+  "title": "Convert onto existing account linking an existing contact",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§32 Conversion",
+  "pre": "Existing account with contact C1.",
+  "steps": [
+   "Convert; pick existing account and contact C1."
+  ],
+  "expected": "Opportunity linked to C1; no new contact; lead = Converted.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-022",
+  "module": "LEAD",
+  "title": "Convert a non-Qualified lead",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 Conversion",
+  "pre": "Lead in Contacted.",
+  "steps": [
+   "Call convert via API/UI."
+  ],
+  "expected": "Rejected: \"Lead must be Qualified before it can be converted (current status: 'Contacted').\" Button hidden in UI.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-023",
+  "module": "LEAD",
+  "title": "First-response SLA shows state in list",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§5 SLA / Flow: Assigned · 1h SLA",
+  "pre": "Lead created; business-hours calendar configured; SLA-01 target 1 hour.",
+  "steps": [
+   "Create lead; view Response SLA column immediately.",
+   "Wait past target (or use a short test target) without contacting."
+  ],
+  "expected": "SLA column shows remaining time; after breach it shows red 'breached'; escalation notification is sent per escalation levels.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-024",
+  "module": "LEAD",
+  "title": "SLA-01 target picks source/value bracket",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§5 SLA targets",
+  "pre": "SLA-01 has targets for 'Source = IndiaMART or Google Ads' and 'Estimated value ≥ ₹50 L'.",
+  "steps": [
+   "Create lead with source IndiaMART; create another with value ₹60,00,000."
+  ],
+  "expected": "Each lead's SLA uses the matching tighter target rather than the default.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-LEAD-025",
+  "module": "LEAD",
+  "title": "Archive (soft-delete) a lead",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§27 Soft delete",
+  "pre": "Lead exists; user has Delete permission.",
+  "steps": [
+   "Delete the lead from list/detail."
+  ],
+  "expected": "Lead disappears from lists but remains in DB (isDeleted = true); not hard-deleted.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-026",
+  "module": "LEAD",
+  "title": "Sales Executive cannot see another rep's leads",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Hierarchy",
+  "pre": "Leads owned by rep A and rep B.",
+  "steps": [
+   "Log in as A; open list; open B's lead URL directly."
+  ],
+  "expected": "A sees only own leads; B's lead returns 'not found'.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-027",
+  "module": "LEAD",
+  "title": "Lead list search, filter by status/owner, sort, pagination",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§26 List behaviours",
+  "pre": "> 25 leads exist.",
+  "steps": [
+   "Search by company, phone.",
+   "Filter by status and owner.",
+   "Sort by value.",
+   "Go to page 2."
+  ],
+  "expected": "Results match the criteria; server-side pagination works; total count correct.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-LEAD-028",
+  "module": "LEAD",
+  "title": "Webhook/website lead received twice",
+  "type": "Integration",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§30 Idempotency",
+  "pre": "Website/Meta/IndiaMART integration configured.",
+  "steps": [
+   "Submit the same payload (same external id) twice."
+  ],
+  "expected": "Spec: no duplicate lead created.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Dedup for the generic CRM leads exists; confirm the same rule applies to Manufacturing leads fed by integrations.",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-ACC-001",
+  "module": "ACC",
+  "title": "Create account with GSTIN",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§4 / Flow P2",
+  "pre": "Logged in.",
+  "steps": [
+   "Accounts → New account.",
+   "Enter legal name, GSTIN, type, industry, territory, city, state.",
+   "Save."
+  ],
+  "expected": "Account created with status Active, owner = creator; appears in list.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-002",
+  "module": "ACC",
+  "title": "Account mandatory fields",
+  "type": "Validation",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§4 Validation",
+  "pre": "Logged in.",
+  "steps": [
+   "Open New account; save with blank name/type/industry/territory."
+  ],
+  "expected": "Validation errors; no record created.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-003",
+  "module": "ACC",
+  "title": "Duplicate account (name / GSTIN) on manual create",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§4 Duplicate detection / Flow: Block + link existing",
+  "pre": "Account 'Shree Steel Pvt Ltd' with GSTIN exists.",
+  "steps": [
+   "Create another account with the same GSTIN or same normalised name."
+  ],
+  "expected": "Spec: flag duplicate before save and link to existing. Flow: 'Duplicate GSTIN / name → Block + link existing'.",
+  "build": "Partial",
+  "verification": "Confirmed in code",
+  "verificationNote": "The account form warns on blur using dupKeys name + gstin ('A matching account already exists. Open existing'); it does not block saving and the backend does not enforce uniqueness on manual create.",
+  "note": "Dedupe is implemented in lead conversion; verify the manual New-account form also blocks. Log defect if both are created.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-004",
+  "module": "ACC",
+  "title": "Add multiple plants to one account",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§4 Plants",
+  "pre": "Account exists.",
+  "steps": [
+   "Open account → Plants tab.",
+   "Add Plant 1 and Plant 2 with address/territory/type."
+  ],
+  "expected": "Both plants listed under the account; each has its own address.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-005",
+  "module": "ACC",
+  "title": "Mark account Dormant and Reactivate",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§4 Status flow",
+  "pre": "Account Active.",
+  "steps": [
+   "Click 'Mark dormant'.",
+   "Click 'Reactivate'."
+  ],
+  "expected": "Active → Dormant → Active. 'Mark dormant' is allowed from Active/On hold only; 'Reactivate' from Dormant/On hold only (else \"Cannot … an account in status …\").",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-006",
+  "module": "ACC",
+  "title": "Reassign account owner",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§4 Ownership audit",
+  "pre": "Account owned by rep A.",
+  "steps": [
+   "Click 'Reassign owner'.",
+   "Pick rep B and confirm."
+  ],
+  "expected": "Owner changes to B; B now sees the account; A (own-only role) no longer does.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Reassign is a plain ownerId update; spec requires audit history of the change — verify audit entry exists.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-007",
+  "module": "ACC",
+  "title": "Account 360° tabs show linked records",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§4 360° view",
+  "pre": "Account with contacts, opps, quotes, orders, assets, tickets, payments.",
+  "steps": [
+   "Open each tab on the account."
+  ],
+  "expected": "Each tab lists only records of that account; counts consistent with module lists.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACC-008",
+  "module": "ACC",
+  "title": "Search account by GSTIN / name / city",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§4 Search",
+  "pre": "Several accounts.",
+  "steps": [
+   "Use list search for partial name, GSTIN, city."
+  ],
+  "expected": "Matching accounts returned.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CON-001",
+  "module": "CON",
+  "title": "Create contact with buying role",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§4 / Flow P2",
+  "pre": "Account exists.",
+  "steps": [
+   "Contacts → New.",
+   "Select account, plant, name, designation, phone, WhatsApp, email.",
+   "Choose buying role and influence.",
+   "Save."
+  ],
+  "expected": "Contact saved and visible on the account's Contacts tab.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CON-002",
+  "module": "CON",
+  "title": "Buying role list is complete",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§4 Buying roles",
+  "pre": "Master 'buying' seeded.",
+  "steps": [
+   "Open buying-role dropdown."
+  ],
+  "expected": "Decision Maker, Technical Influencer, User, Procurement, Finance, Gatekeeper, Management.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CON-003",
+  "module": "CON",
+  "title": "Duplicate contact (phone/email) on same account",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§4 Duplicate detection",
+  "pre": "Contact exists with phone 9812345678.",
+  "steps": [
+   "Create another contact on the same account with the same phone."
+  ],
+  "expected": "Spec: duplicate flagged before save.",
+  "build": "Partial",
+  "verification": "Confirmed in code",
+  "verificationNote": "The contact form warns on blur using dupKeys phone + email (list search, not scoped to the same account); it does not block saving.",
+  "note": "Confirm manual-create duplicate warning; conversion path is covered by LEAD cases.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CON-004",
+  "module": "CON",
+  "title": "Contact linked to a plant of the same account",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§4 Multi-plant",
+  "pre": "Account with 2 plants.",
+  "steps": [
+   "Create contact selecting Plant 2."
+  ],
+  "expected": "Contact shows plant; only plants of the chosen account are offered.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CON-005",
+  "module": "CON",
+  "title": "Deactivate a contact",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Manager",
+  "ref": "§4 Active status",
+  "pre": "Contact exists.",
+  "steps": [
+   "Set contact inactive."
+  ],
+  "expected": "Contact remains in history but is not offered for new transactions.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify filtering of inactive contacts in dropdowns.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-001",
+  "module": "OPP",
+  "title": "Create opportunity manually",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§6 / Flow: Deals",
+  "pre": "Account + contact exist.",
+  "steps": [
+   "Opportunities → New.",
+   "Select account, contact, product, value, close date, source, next action and next action date.",
+   "Save."
+  ],
+  "expected": "Opportunity created at stage 'Qualified' (10%); owner = creator; currency INR default.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-002",
+  "module": "OPP",
+  "title": "Opportunity requires Next Action and Date",
+  "type": "Validation",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§6 Next action rule",
+  "pre": "Logged in.",
+  "steps": [
+   "Create opportunity without next action / date."
+  ],
+  "expected": "Save blocked: next action and next action date are mandatory on every open opportunity.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-003",
+  "module": "OPP",
+  "title": "Stage update without next action",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§6 Next action rule",
+  "pre": "Open opportunity.",
+  "steps": [
+   "Change stage (edit form or Advance stage) and clear next action/date."
+  ],
+  "expected": "Rejected: \"'nextAction' and 'nextActionDate' are required when updating an active opportunity's stage.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-004",
+  "module": "OPP",
+  "title": "Advance stage through the pipeline",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§6 Stage history",
+  "pre": "Opportunity at Qualified.",
+  "steps": [
+   "Use 'Advance stage' repeatedly through Requirement collected → … → Costing → Quotation sent → Negotiation.",
+   "Open the Stage history tab."
+  ],
+  "expected": "Each change writes an immutable history row (from → to, user, timestamp); days-in-stage resets; probability follows the stages master (10/15/20/25/30/40/45/50/60/65/80/95%).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-005",
+  "module": "OPP",
+  "title": "Age and days-in-stage values",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§6 Stage history",
+  "pre": "Opportunity created some days ago and stage changed later.",
+  "steps": [
+   "Open list and detail."
+  ],
+  "expected": "Age = whole days since creation; days in stage = days since latest stage change.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-006",
+  "module": "OPP",
+  "title": "Cannot set Won/Lost by editing the stage field",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§6 Won/Lost guard",
+  "pre": "Open opportunity.",
+  "steps": [
+   "Edit opportunity and set stage = Won (or Lost) directly."
+  ],
+  "expected": "Rejected: \"Use the 'Mark won'/'Mark lost' actions … to move an opportunity to 'Won'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-007",
+  "module": "OPP",
+  "title": "Mark lost with mandatory reason",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§22 Lost reason",
+  "pre": "Open opportunity in any pre-PO stage.",
+  "steps": [
+   "Click 'Mark lost'.",
+   "Select reason (e.g. Price) and confirm."
+  ],
+  "expected": "Stage = Lost; reason stored; history row added; removed from active pipeline but retained for analytics.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-008",
+  "module": "OPP",
+  "title": "Mark lost without reason",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§22 Lost reason",
+  "pre": "Open opportunity.",
+  "steps": [
+   "Click 'Mark lost'; submit blank reason."
+  ],
+  "expected": "Rejected: \"'lost' is required to Mark lost.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-009",
+  "module": "OPP",
+  "title": "Lost-reason list",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§22 Lost reasons master",
+  "pre": "Master 'lost' seeded.",
+  "steps": [
+   "Open lost-reason dropdown."
+  ],
+  "expected": "Price, Competitor, Technical mismatch, Delivery time, Budget, Project cancelled, No response, Existing vendor, Payment terms, Internal approval, Other.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-010",
+  "module": "OPP",
+  "title": "Mark won from allowed stages only",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§6 Won",
+  "pre": "Opportunities in Negotiation / PO expected / PO received and one in Qualified.",
+  "steps": [
+   "Click 'Mark won' on each."
+  ],
+  "expected": "Allowed from Negotiation, PO expected, PO received; refused from Qualified: \"Cannot Mark won an opportunity in stage 'Qualified'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-011",
+  "module": "OPP",
+  "title": "Actions on Won/Lost opportunity",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§6 Closed opportunities",
+  "pre": "Opportunity Lost.",
+  "steps": [
+   "Try 'Mark lost' again / 'Advance stage'."
+  ],
+  "expected": "Further transitions refused; Advance stage hidden for Won/Lost/PO received.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-012",
+  "module": "OPP",
+  "title": "Multiple quotations and products per opportunity",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§6 Multiple quotations",
+  "pre": "Opportunity exists.",
+  "steps": [
+   "Create two quotations under the same opportunity."
+  ],
+  "expected": "Both appear in the Quotations tab; opportunity value is independent of quotation value.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-013",
+  "module": "OPP",
+  "title": "Stagnation SLA (SLA-03/04) on stage entry",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§6 Automation",
+  "pre": "SLA-03 targets configured per stage.",
+  "steps": [
+   "Move a deal to a new stage.",
+   "Check SLA state; leave it past the target."
+  ],
+  "expected": "Stage-stagnation timer restarts on each stage change; breach alerts owner; high-value (≥ ₹1 Cr) deals escalate to manager (SLA-04).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-014",
+  "module": "OPP",
+  "title": "Expected close date crossed alert",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§6 Automation",
+  "pre": "Opportunity with close date in the past.",
+  "steps": [
+   "Wait for / trigger the SLA sweep."
+  ],
+  "expected": "Owner alert generated; entry visible in notification bell.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Date-triggered sweep exists for several SLAs; confirm a close-date policy exists.",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-OPP-015",
+  "module": "OPP",
+  "title": "Log activity from the opportunity",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§6 Log activity",
+  "pre": "Opportunity open.",
+  "steps": [
+   "Click 'Log activity'; fill type, subject, outcome; save."
+  ],
+  "expected": "Activity linked to the opportunity and visible in Activities tab and timeline.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-OPP-016",
+  "module": "OPP",
+  "title": "Hierarchy scoping on opportunities",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Scope",
+  "pre": "Opps owned by A and B.",
+  "steps": [
+   "Log in as A; list and open B's opportunity by URL."
+  ],
+  "expected": "Only A's opportunities visible; B's returns not found.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-001",
+  "module": "ACT",
+  "title": "Create an activity (task) linked to an opportunity",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§9 / Flow: Activities",
+  "pre": "Opportunity exists.",
+  "steps": [
+   "Activities → New.",
+   "Select type Call, subject, due date, link opportunity.",
+   "Save."
+  ],
+  "expected": "Activity created with status Open; owner = creator (Sales Executive cannot assign others).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-002",
+  "module": "ACT",
+  "title": "Activity type list",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§9 Types",
+  "pre": "Master 'activityTypes' seeded.",
+  "steps": [
+   "Open type dropdown."
+  ],
+  "expected": "Call, WhatsApp, Email, Meeting, Site visit, Demo, Quotation follow-up, PO follow-up, Payment follow-up, Service follow-up.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-003",
+  "module": "ACT",
+  "title": "Complete activity with outcome",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§9 Outcome rule",
+  "pre": "Open activity.",
+  "steps": [
+   "Click Complete; enter outcome; confirm."
+  ],
+  "expected": "Status = Completed; outcome stored; SLA-06 stops; linked opportunity's SLA-05 'Next action overdue' also stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-004",
+  "module": "ACT",
+  "title": "Complete activity without outcome",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§9 Outcome rule",
+  "pre": "Open activity.",
+  "steps": [
+   "Click Complete with blank outcome."
+  ],
+  "expected": "Rejected: \"'outcome' is required to Complete.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-005",
+  "module": "ACT",
+  "title": "Cancel an activity; complete a cancelled one",
+  "type": "Negative",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§9 Status",
+  "pre": "Open activity.",
+  "steps": [
+   "Cancel it.",
+   "Try Complete."
+  ],
+  "expected": "Cancel allowed from Open only; Complete afterwards is rejected: \"Cannot Complete an activity in status 'Cancelled'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-006",
+  "module": "ACT",
+  "title": "Activity linked to lead/contact/account",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§9 Linking",
+  "pre": "Lead, contact, account exist.",
+  "steps": [
+   "Create activities linked to each."
+  ],
+  "expected": "Each appears on the corresponding record's Activities tab; links to other-org records are rejected.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-007",
+  "module": "ACT",
+  "title": "Overdue follow-up shows red",
+  "type": "UI/UX",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§9 Overdue",
+  "pre": "Open activity with due date in the past.",
+  "steps": [
+   "Open Activities list and dashboard 'Overdue follow-ups'."
+  ],
+  "expected": "Item flagged red/overdue; appears in the salesperson dashboard overdue list.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-008",
+  "module": "ACT",
+  "title": "Overdue high-priority task escalates (SLA-06)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§9 Escalation",
+  "pre": "SLA-06 priority targets configured.",
+  "steps": [
+   "Create High-priority activity due now; let it age past target."
+  ],
+  "expected": "Owner notified, then manager per escalation levels; breach logged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ACT-009",
+  "module": "ACT",
+  "title": "Unified timeline on Account / Opportunity",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§9 Timeline",
+  "pre": "Activities, visits and stage changes exist.",
+  "steps": [
+   "Open the Activities tab of an opportunity and account."
+  ],
+  "expected": "Chronological list of interactions with owner, type, outcome.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Activities tab is a related list; verify visits/demos/quotation events also appear if expected.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-001",
+  "module": "RFQ",
+  "title": "Create an RFQ for an opportunity",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§7 / Flow P3",
+  "pre": "Opportunity exists.",
+  "steps": [
+   "RFQs → New.",
+   "Select opportunity; enter customer RFQ no., application, product, quantity, capacity, specs.",
+   "Save."
+  ],
+  "expected": "RFQ created with status 'Received', revision 1; SLA-07 'Technical feasibility response' starts.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-002",
+  "module": "RFQ",
+  "title": "Mark feasible → Approve for costing",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§7 Status flow",
+  "pre": "RFQ Received.",
+  "steps": [
+   "Click 'Mark feasible'.",
+   "Click 'Approve for costing'."
+  ],
+  "expected": "Received → Technically feasible → Approved for costing; SLA-07 stops on the first decision; costing sheet can now be created (SLA-10 starts).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-003",
+  "module": "RFQ",
+  "title": "Approve for costing directly from Received",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§7 Status flow",
+  "pre": "RFQ Received.",
+  "steps": [
+   "Attempt 'Approve for costing'."
+  ],
+  "expected": "Rejected: \"Cannot Approve for costing an RFQ in status 'Received'.\" (only from Technically feasible).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-004",
+  "module": "RFQ",
+  "title": "Request clarification with note",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§7 Clarification",
+  "pre": "RFQ Received or Technically feasible.",
+  "steps": [
+   "Click 'Request clarification'; enter note; confirm."
+  ],
+  "expected": "Status = Clarification required; note saved; sales owner notified.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-005",
+  "module": "RFQ",
+  "title": "Clarification without note",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Application Engineer",
+  "ref": "§7 Clarification",
+  "pre": "RFQ Received.",
+  "steps": [
+   "Request clarification with blank note."
+  ],
+  "expected": "Rejected: \"'clarification' is required to Request clarification.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-006",
+  "module": "RFQ",
+  "title": "Mark Not feasible with reason",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§7 / Flow: Not feasible",
+  "pre": "RFQ Received or Clarification required.",
+  "steps": [
+   "Click 'Not feasible'; enter reason."
+  ],
+  "expected": "Status = Not feasible; reason stored. Blank reason is rejected (\"'nf' is required…\").",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-007",
+  "module": "RFQ",
+  "title": "Create new revision of an RFQ",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§7 Revisions",
+  "pre": "RFQ with specs exists.",
+  "steps": [
+   "Click 'New revision'.",
+   "Change a spec; save.",
+   "Open Revisions tab."
+  ],
+  "expected": "Revision number increments; previous revision retained and viewable; history preserved.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-008",
+  "module": "RFQ",
+  "title": "Attach RFQ documents/drawings",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Application Engineer",
+  "ref": "§7 Attachments",
+  "pre": "RFQ exists.",
+  "steps": [
+   "Upload PDF, DWG/image attachments."
+  ],
+  "expected": "Files stored and downloadable via short-lived signed URLs; type/size limits enforced.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify attachment support on the RFQ form; spec lists RFQ/BOQ/drawing/layout/photos/datasheet.",
+  "automation": "skip:manual-visual"
+ },
+ {
+  "id": "TC-RFQ-009",
+  "module": "RFQ",
+  "title": "Costing gated by technical feasibility",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§7 Gate",
+  "pre": "RFQ not yet Approved for costing.",
+  "steps": [
+   "Try to create/submit costing for the opportunity."
+  ],
+  "expected": "Spec: costing/quotation should be gated until RFQ is Approved for costing.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Costing create only validates opportunity; confirm if UI/ rule blocks it.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RFQ-010",
+  "module": "RFQ",
+  "title": "Sales notified on clarification requested/completed",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§7 Notification",
+  "pre": "Clarification flow executed.",
+  "steps": [
+   "Check notification bell as sales owner."
+  ],
+  "expected": "In-app notification appears for the sales owner.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Confirm notifications are wired for RFQ events.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-001",
+  "module": "VIS",
+  "title": "Schedule a site visit",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§10 / Flow P3",
+  "pre": "Opportunity exists.",
+  "steps": [
+   "Site visits → New.",
+   "Select opportunity, account/plant, date-time, engineer, objective.",
+   "Save."
+  ],
+  "expected": "Visit created with status Planned.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-002",
+  "module": "VIS",
+  "title": "Confirm visit",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§10 Status flow",
+  "pre": "Visit Planned or Rescheduled.",
+  "steps": [
+   "Click Confirm."
+  ],
+  "expected": "Status = Confirmed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-003",
+  "module": "VIS",
+  "title": "Reschedule requires new date",
+  "type": "Validation",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§10 Status flow",
+  "pre": "Visit Planned/Confirmed.",
+  "steps": [
+   "Click Reschedule without a date.",
+   "Repeat with a date."
+  ],
+  "expected": "Without date: \"'date' is required to Reschedule.\" With date: status Rescheduled and date updated; can be Confirmed again.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-004",
+  "module": "VIS",
+  "title": "Complete visit requires next action",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§10 Completion rule / Flow",
+  "pre": "Visit Confirmed.",
+  "steps": [
+   "Click 'Complete visit' with no next action."
+  ],
+  "expected": "Rejected: \"'next' is required to Complete visit.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-005",
+  "module": "VIS",
+  "title": "Complete visit with findings and next action",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§10 Completion",
+  "pre": "Visit Confirmed; findings filled.",
+  "steps": [
+   "Enter observations, recommended solution, next action; Complete visit."
+  ],
+  "expected": "Status = Completed; visit appears in opportunity timeline; SLA-08 'report submission' starts.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-006",
+  "module": "VIS",
+  "title": "Download Site Visit Report PDF",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§10 PDF",
+  "pre": "Visit Completed.",
+  "steps": [
+   "Click 'Download report PDF'."
+  ],
+  "expected": "A real PDF downloads containing account, plant, date, engineers, objective, findings, recommendation, next action. Button only appears for Completed visits.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-007",
+  "module": "VIS",
+  "title": "Cancel a visit",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§10 Cancel",
+  "pre": "Visit Planned/Confirmed/Rescheduled.",
+  "steps": [
+   "Click Cancel."
+  ],
+  "expected": "Status = Cancelled; cannot be completed afterwards.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-008",
+  "module": "VIS",
+  "title": "Complete a Cancelled/Completed visit",
+  "type": "Negative",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§10 Invalid",
+  "pre": "Visit Cancelled.",
+  "steps": [
+   "Try Complete visit."
+  ],
+  "expected": "Rejected: \"Cannot Complete visit a site visit in status 'Cancelled'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-VIS-009",
+  "module": "VIS",
+  "title": "Visit reminder before scheduled time",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§10 Reminder",
+  "pre": "Visit scheduled within 24h.",
+  "steps": [
+   "Wait for reminder window."
+  ],
+  "expected": "Reminder notification generated.",
+  "build": "Gap",
+  "verification": "Confirmed in code",
+  "verificationNote": "The SLA date-sweep rules cover opportunities, activities, quotations, sales orders, coverage and payments only; nothing is scheduled for site visits.",
+  "note": "No visit-reminder policy found among the 22 default SLA policies; verify.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-VIS-010",
+  "module": "VIS",
+  "title": "Attach photographs to visit",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Application Engineer",
+  "ref": "§10 Photos",
+  "pre": "Visit exists.",
+  "steps": [
+   "Upload photos."
+  ],
+  "expected": "Photos stored and viewable.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify attachment UI on visit form.",
+  "automation": "skip:manual-visual"
+ },
+ {
+  "id": "TC-DEM-001",
+  "module": "DEM",
+  "title": "Request a demo/trial",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§11 / Flow P3",
+  "pre": "Opportunity exists.",
+  "steps": [
+   "Demos → New; select opportunity, type, product/sample, planned date.",
+   "Save."
+  ],
+  "expected": "Evaluation created with status 'Requested'.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-002",
+  "module": "DEM",
+  "title": "Schedule → Start → Mark successful",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§11 Status flow",
+  "pre": "Evaluation Requested.",
+  "steps": [
+   "Click Schedule.",
+   "Click Start.",
+   "Click 'Mark successful'."
+  ],
+  "expected": "Requested → Scheduled → In progress → Successful; SLA-09 'Evaluation result' starts at Start and stops when result recorded.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-003",
+  "module": "DEM",
+  "title": "Start before Schedule",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Application Engineer",
+  "ref": "§11 Status flow",
+  "pre": "Evaluation Requested.",
+  "steps": [
+   "Attempt Start."
+  ],
+  "expected": "Rejected: \"Cannot Start an evaluation in status 'Requested'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-004",
+  "module": "DEM",
+  "title": "Mark failed requires result",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Application Engineer",
+  "ref": "§11 Failure rule",
+  "pre": "Evaluation In progress.",
+  "steps": [
+   "Click 'Mark failed' with empty result."
+  ],
+  "expected": "Rejected: \"'result' is required to Mark failed.\" With result: status Failed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-005",
+  "module": "DEM",
+  "title": "Customer approved / rejected",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§11 Customer decision",
+  "pre": "Evaluation Successful.",
+  "steps": [
+   "Click 'Customer approved' (separate case: 'Customer rejected')."
+  ],
+  "expected": "Status = Customer approved (only from Successful); Customer rejected allowed from Successful/Completed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-006",
+  "module": "DEM",
+  "title": "Successful trial prompts move to Solution proposed",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§11 Hand-off / Flow: Success prompts Solution proposed",
+  "pre": "Evaluation Successful / Customer approved.",
+  "steps": [
+   "Observe prompt after success.",
+   "Advance opportunity to Solution proposed."
+  ],
+  "expected": "User is prompted (or can easily move) the opportunity to 'Solution proposed' (40%).",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Confirm a prompt exists in UI; stage move itself is manual via Advance stage.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-007",
+  "module": "DEM",
+  "title": "Sample logistics fields",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Application Engineer",
+  "ref": "§11 Logistics",
+  "pre": "Sample evaluation.",
+  "steps": [
+   "Fill dispatch/delivery/test dates on Sample logistics tab."
+  ],
+  "expected": "Dates stored and shown.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DEM-008",
+  "module": "DEM",
+  "title": "Evaluation overdue reminder",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Application Engineer",
+  "ref": "§11 Overdue",
+  "pre": "Planned date passed.",
+  "steps": [
+   "Wait for SLA sweep."
+  ],
+  "expected": "Owner reminder generated.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "SLA-09 covers result time only; confirm overdue-planned reminder.",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-PRD-001",
+  "module": "PRD",
+  "title": "Create product with SKU, price, tax, lead time",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§8 / Flow: Products",
+  "pre": "Logged in as Commercial.",
+  "steps": [
+   "Products → New.",
+   "Enter category, family, model, SKU, price, HSN, GST rate, lead time, warranty months.",
+   "Save."
+  ],
+  "expected": "Product saved; visible in list and in quotation product pickers.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PRD-002",
+  "module": "PRD",
+  "title": "Category → Family → Model → SKU",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§8 Hierarchy",
+  "pre": "Categories master seeded.",
+  "steps": [
+   "Create products across categories (Weighbridges, Belt weighers, Checkweighers, Bagging & packing, Conveyors, Components, Services)."
+  ],
+  "expected": "Hierarchy reflected in list filters and detail.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PRD-003",
+  "module": "PRD",
+  "title": "Specification attributes tab",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§8 Specification",
+  "pre": "Product exists.",
+  "steps": [
+   "Open Specification tab.",
+   "Add/edit attributes."
+  ],
+  "expected": "Attributes saved per product (ProductAttribute) and shown on the tab.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PRD-004",
+  "module": "PRD",
+  "title": "Standard cost / minimum price restricted",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§8 Restricted fields",
+  "pre": "Field-security default: Standard cost & Minimum selling price restricted to roles other than Super Admin, Director, Sales Head, Commercial.",
+  "steps": [
+   "Log in as Sales Executive; open product list/detail and call the product API/export."
+  ],
+  "expected": "Standard cost and minimum price are absent from UI, API response and exports.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PRD-005",
+  "module": "PRD",
+  "title": "Inactive product unavailable for new quotes",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§8 Inactive",
+  "pre": "Product marked inactive.",
+  "steps": [
+   "Create a quotation line; open product picker.",
+   "Open an old quotation containing the product."
+  ],
+  "expected": "Inactive product not selectable for new transactions; still visible on historical records.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify picker filters inactive products.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PRD-006",
+  "module": "PRD",
+  "title": "Archive product",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Commercial / Estimation",
+  "ref": "§8 Archive",
+  "pre": "Product exists.",
+  "steps": [
+   "Delete product."
+  ],
+  "expected": "Soft-deleted; historical quotations unaffected.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-001",
+  "module": "CST",
+  "title": "Create a costing sheet",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§12 / Flow: Costing 45%",
+  "pre": "Opportunity exists; RFQ approved for costing.",
+  "steps": [
+   "Costing → New.",
+   "Select opportunity; enter material, bought-out, fabrication, electrical, software, labour, installation, freight, packing, travel, overhead, contingency, other costs and selling price.",
+   "Save."
+  ],
+  "expected": "Sheet created in Draft, revision 0/1; SLA-10 'Costing preparation' starts (target 3 business days).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-002",
+  "module": "CST",
+  "title": "Total cost, gross margin and margin % computed correctly",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Formulas",
+  "pre": "Sheet with costs: material 400000, bought-out 100000, fabrication 150000, labour 50000, other 0; selling price 1000000.",
+  "steps": [
+   "Submit the sheet (or view breakdown)."
+  ],
+  "expected": "Total cost = 700000; Gross margin = 300000; Margin % = 30.00. Breakdown tab lists every component with value.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-003",
+  "module": "CST",
+  "title": "Zero selling price does not divide by zero",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Formulas",
+  "pre": "Sheet with selling price 0.",
+  "steps": [
+   "Submit sheet."
+  ],
+  "expected": "No crash; margin % reported as 0.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-004",
+  "module": "CST",
+  "title": "Submit with margin ≥ 20% (no rule matches high band)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Approval routing",
+  "pre": "Default Margin rules: 15–20% → Sales Head; 0–15% → Director.",
+  "steps": [
+   "Submit sheet with margin 30%."
+  ],
+  "expected": "Rule lookup uses last band for value above max; verify outcome per configured rules — document whether sheet becomes 'Approval pending' or 'Approved'.",
+  "build": "Built",
+  "verification": "Confirmed live",
+  "verificationNote": "30% margin gave 'Approval pending' routed to Sales Head (the top band). 12% margin went to Director; 17% to Sales Head.",
+  "note": "findMatchingApprovalRule returns the highest band when value ≥ max, so 30% still routes to the top band (Sales Head). Confirm this is the intended business behaviour.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-005",
+  "module": "CST",
+  "title": "Submit with low margin routes to approver",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Approval routing",
+  "pre": "Default rules.",
+  "steps": [
+   "Create sheet with margin 12%; Submit."
+  ],
+  "expected": "Sheet → 'Approval pending'; an Approval record (type Margin, status Requested, approver Director) is created; SLA-14 starts.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-006",
+  "module": "CST",
+  "title": "Submit with margin in 15–20% band",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Approval routing",
+  "pre": "Default rules.",
+  "steps": [
+   "Sheet with margin 17%; Submit."
+  ],
+  "expected": "Approval created for 'Sales Head'; reason text 'GM% 17.00 matched rule …'.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-007",
+  "module": "CST",
+  "title": "Submit when no margin rules configured",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§12 Approval routing",
+  "pre": "All Margin rules deactivated.",
+  "steps": [
+   "Submit sheet."
+  ],
+  "expected": "Sheet auto-moves to 'Approved' with no approval record.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-008",
+  "module": "CST",
+  "title": "Submit from non-Draft",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Status flow",
+  "pre": "Sheet Approval pending.",
+  "steps": [
+   "Click Submit."
+  ],
+  "expected": "Rejected: \"Cannot submit a costing sheet in status 'Approval pending'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-009",
+  "module": "CST",
+  "title": "Approve and reject costing",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Head",
+  "ref": "§12 Approve/Reject",
+  "pre": "Sheet Approval pending.",
+  "steps": [
+   "Click Approve (separate: Reject with reason)."
+  ],
+  "expected": "Approve → Approved, approvedBy = current user. Reject requires reason (\"'rej' is required to Reject.\") → Rejected. Rejected sheet can be Submitted again (button shows for Draft/Rejected).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-010",
+  "module": "CST",
+  "title": "New costing revision",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Revisions",
+  "pre": "Sheet Approved or Rejected.",
+  "steps": [
+   "Click 'New revision'."
+  ],
+  "expected": "Sheet returns to Draft; revision number +1; editing re-enabled. On a sheet already in Draft: \"Costing sheet … is already in Draft.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-011",
+  "module": "CST",
+  "title": "Costing hidden from Sales Executive",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§12 Field security",
+  "pre": "Default field security.",
+  "steps": [
+   "Open Costing list URL.",
+   "Call GET /costing API; open quotation detail."
+  ],
+  "expected": "Costing module returns 'Costing is restricted.' (403); no cost/margin appears in any UI screen, API response, PDF or export.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-012",
+  "module": "CST",
+  "title": "Quotation PDF does not expose cost",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Customer docs",
+  "pre": "Costing exists for the opportunity.",
+  "steps": [
+   "Download a quotation PDF."
+  ],
+  "expected": "PDF contains only customer pricing; no cost, margin or costing references.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-CST-013",
+  "module": "CST",
+  "title": "Costing linked to opportunity and account scoped to org",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§12 Link",
+  "pre": "Opportunity ID from another org.",
+  "steps": [
+   "Create costing with a foreign opportunity id (API)."
+  ],
+  "expected": "Rejected: \"Opportunity '…' not found in your organization.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-001",
+  "module": "QUO",
+  "title": "Create quotation with line items",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 / Flow: Quotation vN",
+  "pre": "Opportunity and products exist.",
+  "steps": [
+   "Quotations → New.",
+   "Select opportunity; set validity date, payment terms, delivery terms.",
+   "Add lines (product, qty, unit price, discount %)."
+  ],
+  "expected": "Quotation V1 created in Draft; line amounts = qty × price × (1 − discount%); defaults for tax/warranty/lead time pre-filled from product.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify default population from product master in UI.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-002",
+  "module": "QUO",
+  "title": "Edit lines only while Draft",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 Lines guard",
+  "pre": "Quotation Sent or Approved.",
+  "steps": [
+   "Try to add/edit/remove a line."
+  ],
+  "expected": "Rejected: \"Quotation lines can only be edited while the quotation is in Draft (current status: '…').\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-003",
+  "module": "QUO",
+  "title": "Submit for approval — no rule matches (discount ≤ 5%)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 Submit",
+  "pre": "Lines with max discount 3%. Default Discount rules.",
+  "steps": [
+   "Click 'Submit for approval'."
+  ],
+  "expected": "Status → Approved or Approval pending per rule lookup (0–5% band approver 'Salesperson'); verify which one occurs and that SLA-11 'Quotation issue' starts when Approved.",
+  "build": "Built",
+  "verification": "Confirmed live",
+  "verificationNote": "With the default rules even 0% and 3% discounts create a Discount approval (approver 'Salesperson') and the quotation goes to 'Approval pending'. It only auto-approves when no rules exist.",
+  "note": "Default 0–5% band is configured as an approval rule, so a record may still be created; record actual behaviour.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-004",
+  "module": "QUO",
+  "title": "Discount 5–10% routes to Sales Manager",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§14 Discount rule",
+  "pre": "Default rules.",
+  "steps": [
+   "Add a line with 8% discount; Submit for approval."
+  ],
+  "expected": "Quotation → 'Approval pending'; Approval (type Discount, approver Sales Manager, status Requested) created; reason 'Discount 8% matched rule …'.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-005",
+  "module": "QUO",
+  "title": "Discount 10–15% routes to Sales Head; >15% to Director",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§14 Discount rule",
+  "pre": "Default rules.",
+  "steps": [
+   "Submit quote with 12% discount.",
+   "Submit another with 20%."
+  ],
+  "expected": "12% → Sales Head; 20% → Director.",
+  "build": "Built",
+  "verification": "Confirmed live",
+  "verificationNote": "12% went to Sales Head and 20% to Director. 5% and 8% went to Sales Manager.",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-006",
+  "module": "QUO",
+  "title": "Highest line discount drives the rule",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§14 Discount rule",
+  "pre": "Quote with lines at 2%, 4%, 11%.",
+  "steps": [
+   "Submit."
+  ],
+  "expected": "Rule chosen for 11% (maximum across lines).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-007",
+  "module": "QUO",
+  "title": "Warning when price below minimum selling price",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§8 Min price",
+  "pre": "Product minimum price ₹100,000; line unit price ₹110,000 with 12% discount (net ₹96,800).",
+  "steps": [
+   "Submit quotation."
+  ],
+  "expected": "Submission response carries warning: 'Line for <SKU> is priced below minimum (₹96800.00 < ₹100000)'; UI shows the warning.",
+  "build": "Built",
+  "verification": "Confirmed live",
+  "verificationNote": "12% on ₹10 L (min ₹9 L) returned the warning 'Line for … is priced below minimum (₹880000.00 < ₹900000)'.",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-008",
+  "module": "QUO",
+  "title": "Cannot mark Sent while approval pending",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§14 Block",
+  "pre": "Quotation Approval pending.",
+  "steps": [
+   "Click 'Mark sent' (UI/API)."
+  ],
+  "expected": "Rejected: \"Cannot Mark sent a quotation in status 'Approval pending'.\" Only Approved quotations can be Sent.",
+  "build": "Built",
+  "verification": "Confirmed live",
+  "verificationNote": "Mark sent on an Approval-pending quotation returned 400 \"Cannot Mark sent a quotation in status 'Approval pending'.\"",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-009",
+  "module": "QUO",
+  "title": "Approve quotation then mark sent",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§14 Approve",
+  "pre": "Quotation Approval pending.",
+  "steps": [
+   "Click Approve.",
+   "Click 'Mark sent'."
+  ],
+  "expected": "Approved → Sent; SLA-11 stops and SLA-12 'Quotation follow-up' starts (3 days); follow-up task expected.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Spec requires an auto follow-up task on Sent; SLA timer exists — confirm an Activity is also created.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-010",
+  "module": "QUO",
+  "title": "Reject quotation approval returns to Draft",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§14 Reject",
+  "pre": "Quotation Approval pending.",
+  "steps": [
+   "Click Reject with reason."
+  ],
+  "expected": "Quotation returns to Draft; reason required (\"'rej' is required to Reject.\"); lines editable again.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-011",
+  "module": "QUO",
+  "title": "Revise creates V2; V1 untouched",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 Versioning",
+  "pre": "Quotation V1 Sent.",
+  "steps": [
+   "Click 'Revise → new version'.",
+   "Open V1 and V2."
+  ],
+  "expected": "V2 created in Draft with parentId = V1, lines copied, same terms; V1 status = Revised and read-only; navigation goes to V2; Versions tab shows chain.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-012",
+  "module": "QUO",
+  "title": "Revise from invalid statuses",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§13 Versioning",
+  "pre": "Quotation Draft or Accepted.",
+  "steps": [
+   "Click Revise."
+  ],
+  "expected": "Allowed only from Sent, Approved, Rejected, Approval pending; others rejected: \"Cannot revise a quotation in status '…'.\" (button hidden in UI).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-013",
+  "module": "QUO",
+  "title": "Mark accepted / rejected",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 Customer response",
+  "pre": "Quotation Sent.",
+  "steps": [
+   "Click 'Mark accepted' (separate: 'Mark rejected' with reason)."
+  ],
+  "expected": "Accepted: SLA-12 and SLA-13 stop. Rejected requires reason (\"'rej' is required…\"). Both only from Sent.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-014",
+  "module": "QUO",
+  "title": "Download branded quotation PDF",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 PDF",
+  "pre": "Quotation with lines and T&C.",
+  "steps": [
+   "Click 'Download PDF'."
+  ],
+  "expected": "PDF shows quotation id and version, account, billing address, opportunity, dates, payment terms, line table, grand total and T&C. Filename Quotation-<id>-v<version>.pdf.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-015",
+  "module": "QUO",
+  "title": "PDF total equals on-screen total",
+  "type": "Reconciliation",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§13 PDF",
+  "pre": "Quotation with 3 lines and discounts.",
+  "steps": [
+   "Compare Grand total in PDF to detail screen."
+  ],
+  "expected": "Totals identical.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-016",
+  "module": "QUO",
+  "title": "Expiry reminder before validity (SLA-13)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§13 Expiry",
+  "pre": "Quotation Sent with validity date within 7 days.",
+  "steps": [
+   "Trigger the SLA sweep."
+  ],
+  "expected": "Reminder created 7 days before validity; stops on revised/accepted.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-017",
+  "module": "QUO",
+  "title": "Quotation auto-expires after validity date",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§13 Expired status",
+  "pre": "Sent quotation with validity date in the past.",
+  "steps": [
+   "Wait for / run daily job; open quotation."
+  ],
+  "expected": "Spec status 'Expired' applied automatically.",
+  "build": "Gap",
+  "verification": "Confirmed live + code",
+  "verificationNote": "A Sent quotation with validUntil 3 days in the past stayed 'Sent' after the sweeps ran; no code sets 'Expired' (SLA-13 only sends a reminder).",
+  "note": "No 'Expired' transition found in QuotationsService; confirm and log.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-QUO-018",
+  "module": "QUO",
+  "title": "Quotation value separate from opportunity value",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§13 Value tracking",
+  "pre": "Opportunity ₹10 L; quotation ₹11.5 L.",
+  "steps": [
+   "Compare values on both."
+  ],
+  "expected": "Opportunity estimated value unchanged by quotation total.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-019",
+  "module": "QUO",
+  "title": "Issued quotation cannot be overwritten",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Immutability",
+  "pre": "Sent quotation V1.",
+  "steps": [
+   "Try editing commercial fields of V1 (API PATCH)."
+  ],
+  "expected": "Spec: issued version immutable — changes only via revision.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Line edits are blocked outside Draft; confirm header fields (terms, validity) are also locked.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-QUO-020",
+  "module": "QUO",
+  "title": "Discount exactly on a band boundary (5%, 10%, 15%)",
+  "type": "Validation",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§14 Discount rule",
+  "pre": "Default Discount rules; product price ₹10,00,000.",
+  "steps": [
+   "Create three quotations with a single line at exactly 5%, 10% and 15% discount.",
+   "Submit each for approval and note the approver."
+  ],
+  "expected": "Spec §14: up to 5% salesperson, above 5-10% manager, above 10-15% sales head, above 15% director - so 5% goes to Salesperson, 10% to Sales Manager, 15% to Sales Head.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verified live 2 Oct: 5% routed to Sales Manager. Rules match min <= value < max, so an upper-bound value falls into the next band - off by one versus the spec wording.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-001",
+  "module": "APR",
+  "title": "Approval inbox shows requests for the approver role",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§14 / Flow: Approval",
+  "pre": "Pending quotation discount approval for Sales Manager.",
+  "steps": [
+   "Open Approvals list."
+  ],
+  "expected": "Request shown with entity, type, requester, matched rule, status Requested; SLA-14 timer visible.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-002",
+  "module": "APR",
+  "title": "Approve a request",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§14 Statuses",
+  "pre": "Approval Requested/Pending.",
+  "steps": [
+   "Click Approve (optional comments)."
+  ],
+  "expected": "Status = Approved; comments saved; SLA-14 stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-003",
+  "module": "APR",
+  "title": "Return for revision requires comments",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§14 Statuses",
+  "pre": "Approval Pending.",
+  "steps": [
+   "Click 'Return for revision' with blank comments.",
+   "Repeat with comments."
+  ],
+  "expected": "Blank: \"'comments' is required to Return for revision.\" With comments: status 'Returned for revision'.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-004",
+  "module": "APR",
+  "title": "Reject requires comments",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§14 Statuses",
+  "pre": "Approval Pending.",
+  "steps": [
+   "Click Reject with blank comments."
+  ],
+  "expected": "Rejected with message; with comments status = Rejected.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-005",
+  "module": "APR",
+  "title": "Act on an already decided approval",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§14 Terminal",
+  "pre": "Approval Approved.",
+  "steps": [
+   "Click Reject."
+  ],
+  "expected": "Rejected: \"Cannot Reject an approval in status 'Approved'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-006",
+  "module": "APR",
+  "title": "Approval decision reflects on quotation / costing",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§14 Linkage",
+  "pre": "Quotation Approval pending with a linked Approval record.",
+  "steps": [
+   "Approve the Approval request.",
+   "Open the quotation."
+  ],
+  "expected": "Spec: quotation unblocks once its approval is approved.",
+  "build": "Partial",
+  "verification": "Confirmed live",
+  "verificationNote": "Approving the Approval record left the quotation at 'Approval pending' and 'Mark sent' still failed. Only the quotation's own Approve action moves it.",
+  "note": "Code review: Approvals.performAction only updates the Approval; Quotation/Costing statuses change through their own Approve/Reject actions. Record whether the quotation status updates automatically; if not, log as defect/clarification.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-007",
+  "module": "APR",
+  "title": "Approval chain events",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Manager",
+  "ref": "§14 Chain",
+  "pre": "Approval decided.",
+  "steps": [
+   "Open Approval chain tab."
+  ],
+  "expected": "Shows Requested and final decision entries with timestamps.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-008",
+  "module": "APR",
+  "title": "Approval matrix is admin-configurable",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§14 Admin rules",
+  "pre": "Administration → Approval rules.",
+  "steps": [
+   "Change Discount 5–10% approver to Sales Head.",
+   "Submit a quotation with 8% discount."
+  ],
+  "expected": "New rule applies immediately; approval routed to Sales Head.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-009",
+  "module": "APR",
+  "title": "Default approval rules seeded",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§14 Admin rules",
+  "pre": "New manufacturing org.",
+  "steps": [
+   "Open Approval rules."
+  ],
+  "expected": "Discount: 0–5 Salesperson, 5–10 Sales Manager, 10–15 Sales Head, 15–100 Director. Margin: 15–20 Sales Head, 0–15 Director. CreditTerms: 45–60 Accounts, 60–120 Director.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-APR-010",
+  "module": "APR",
+  "title": "Payment-term / credit-term approvals",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§14 Other types",
+  "pre": "CreditTerms rules active.",
+  "steps": [
+   "Create a PO / quotation with 90-day credit."
+  ],
+  "expected": "Spec: credit-term approval requested.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "A PO with '90 days credit' was accepted with no CreditTerms approval created (the rules exist as data only); the parser also labels the milestone 'Retention' 100%.",
+  "note": "CreditTerms rules exist as master data, but no service uses them yet — verify and log.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-APR-011",
+  "module": "APR",
+  "title": "Approval pending beyond SLA escalates",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§14 Escalation",
+  "pre": "SLA-14 target configured.",
+  "steps": [
+   "Leave approval untouched past target."
+  ],
+  "expected": "Escalation email/notification to next level; breach logged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-001",
+  "module": "PO",
+  "title": "Register a purchase order against a quotation",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§15 / Flow P5",
+  "pre": "Quotation Accepted/Sent.",
+  "steps": [
+   "Purchase orders → New.",
+   "Select opportunity, quotation, account; enter PO number, date, value, delivery date, payment terms.",
+   "Save."
+  ],
+  "expected": "PO created with status Received; SLA-15 'PO verification' starts (2 business days).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-002",
+  "module": "PO",
+  "title": "Start verification",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Statuses",
+  "pre": "PO Received.",
+  "steps": [
+   "Click 'Start verification'."
+  ],
+  "expected": "Status = Under verification (only from Received).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-003",
+  "module": "PO",
+  "title": "PO vs Quotation comparison table",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Comparison / Flow: PO verified vs quote",
+  "pre": "PO value differs from quotation total; payment terms differ.",
+  "steps": [
+   "Open PO → 'PO vs Quotation' tab."
+  ],
+  "expected": "Rows for Value, Quantity, Delivery, Payment terms, Products; each marked Match/Mismatch/n/a; value and payment-term mismatch flagged.",
+  "build": "Partial",
+  "verification": "Confirmed live",
+  "verificationNote": "Compare rows: Value Mismatch, Quantity n/a, Delivery Match, Payment terms Mismatch, Products n/a.",
+  "note": "Quantity and Products rows always show 'n/a' (PO has no stored qty/products); spec requires qty, price, tax, specifications comparison.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-004",
+  "module": "PO",
+  "title": "Material mismatch flagged before acceptance",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Mismatch",
+  "pre": "PO with changed price/quantity.",
+  "steps": [
+   "Open PO; click Accept PO."
+  ],
+  "expected": "Spec §37: mismatch clearly flagged; acceptance should require review.",
+  "build": "Partial",
+  "verification": "Confirmed live",
+  "verificationNote": "A ₹1 PO against a ₹10 L quotation (Value = Mismatch) was accepted with no block or warning from the API.",
+  "note": "Compare tab flags mismatches, but acceptPo does not block or warn on them. Record whether UI warns; otherwise log gap.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-005",
+  "module": "PO",
+  "title": "Request clarification with note",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Clarification",
+  "pre": "PO Under verification.",
+  "steps": [
+   "Click 'Request clarification'; enter note."
+  ],
+  "expected": "Status = Clarification required; note stored; SLA-15 stops. Blank note rejected; not allowed from Received.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-006",
+  "module": "PO",
+  "title": "Reject / cancel PO with reason",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Reject",
+  "pre": "PO Received/Under verification/Clarification required.",
+  "steps": [
+   "Click Reject; enter reason."
+  ],
+  "expected": "Status = 'Rejected / cancelled'; reason stored; no sales order created. Blank reason rejected.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-007",
+  "module": "PO",
+  "title": "Accept PO — Won + Sales Order + milestones",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Accept cascade",
+  "pre": "PO Under verification; payment terms '30% advance, 60% before dispatch, 10% after installation'; value ₹10,00,000; opportunity open.",
+  "steps": [
+   "Click 'Accept PO'.",
+   "Open the opportunity, sales order and payments."
+  ],
+  "expected": "PO = Accepted; opportunity = Won with stage-history row; Sales Order created (status Order accepted, handover Pending); 3 payment milestones: Advance 30% ₹3,00,000, Before dispatch 60% ₹6,00,000, After installation 10% ₹1,00,000, all 'Not due'; SLA-15 stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-008",
+  "module": "PO",
+  "title": "Accept PO with '45 days credit'",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Terms parser",
+  "pre": "PO payment terms '45 days credit'.",
+  "steps": [
+   "Accept PO."
+  ],
+  "expected": "Single milestone, 100%, due date = PO date + 45 days.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-009",
+  "module": "PO",
+  "title": "Accept PO with blank / unparseable terms",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Terms parser",
+  "pre": "PO payment terms empty.",
+  "steps": [
+   "Accept PO."
+  ],
+  "expected": "Single milestone 'Full payment' 100% due on PO date.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-010",
+  "module": "PO",
+  "title": "Accept from invalid status",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Accept guard",
+  "pre": "PO Rejected or already Accepted.",
+  "steps": [
+   "Click Accept PO."
+  ],
+  "expected": "Rejected: \"Cannot accept a purchase order in status '…'.\" No duplicate sales order / milestones created (test double-click too).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-011",
+  "module": "PO",
+  "title": "Accept PO is transactional",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Atomicity",
+  "pre": "—",
+  "steps": [
+   "Review data after an accept that fails midway (simulate via DB constraint)."
+  ],
+  "expected": "No partial data: either all of Won/Sales Order/Milestones/Accepted, or none.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Prisma $transaction used.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-012",
+  "module": "PO",
+  "title": "PO received notifies sales manager/commercial",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Manager",
+  "ref": "§15 Notification",
+  "pre": "PO created.",
+  "steps": [
+   "Check notifications."
+  ],
+  "expected": "Spec: manager/commercial notified.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Confirm notification wiring.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PO-013",
+  "module": "PO",
+  "title": "Upload customer PO document",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "§15 Upload",
+  "pre": "PO exists.",
+  "steps": [
+   "Attach PO PDF."
+  ],
+  "expected": "Uploaded PO preserved and downloadable via signed URL.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify upload field exists on PO form.",
+  "automation": "skip:manual-visual"
+ },
+ {
+  "id": "TC-PO-014",
+  "module": "PO",
+  "title": "PO scoped to org and role",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Scope",
+  "pre": "POs exist for two orgs.",
+  "steps": [
+   "Try opening a PO id of another org."
+  ],
+  "expected": "Not found; no data leakage.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-001",
+  "module": "SO",
+  "title": "Sales order created from PO has handover pending",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§16 / Flow: Sales order",
+  "pre": "PO accepted.",
+  "steps": [
+   "Open Sales orders; open the new order."
+  ],
+  "expected": "Status 'Order accepted'; Handover status Pending; links to PO, account; SLA-16 'Handover acknowledgement' running.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-002",
+  "module": "SO",
+  "title": "Operations acknowledges handover",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§16 Acknowledge",
+  "pre": "Order with Pending handover.",
+  "steps": [
+   "Click 'Acknowledge handover'."
+  ],
+  "expected": "Ack status = Acknowledged; SLA-16 stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-003",
+  "module": "SO",
+  "title": "Unacknowledged handover escalates",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Operations",
+  "ref": "§16 Escalation",
+  "pre": "SLA-16 target configured.",
+  "steps": [
+   "Leave order unacknowledged past target."
+  ],
+  "expected": "Escalation notification to configured roles.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-004",
+  "module": "SO",
+  "title": "Advance status through the full flow",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§17 Status flow",
+  "pre": "Order Order accepted.",
+  "steps": [
+   "Click 'Advance status' repeatedly; after each, open Milestones tab."
+  ],
+  "expected": "Sequence: Order accepted → Design → Procurement → Production → Quality check → Ready for dispatch → Dispatched → Delivered → Installation → Commissioned → Closed. Each step adds a milestone row with timestamp; at Dispatched SLA-17 'Delivery commitment risk' stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-005",
+  "module": "SO",
+  "title": "Commissioned requires serial number",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§17 Commissioning",
+  "pre": "Order in Installation.",
+  "steps": [
+   "Click Advance status; leave serial blank."
+  ],
+  "expected": "UI prompts for serial; API rejects: \"'serial' is required to advance a sales order to Commissioned.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-006",
+  "module": "SO",
+  "title": "Commissioning creates installed asset and warranty",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§18 / Flow: asset auto-created",
+  "pre": "Order in Installation; products = 'Truck Weighbridge 60T'.",
+  "steps": [
+   "Advance status; enter serial WB-60-0001."
+  ],
+  "expected": "Order = Commissioned; Installed Asset created: serial WB-60-0001, model from order, status 'Under warranty', installed/commissioned = today, warranty start = today, warranty end = +1 year; linked to account and order; visible on Account → Installed assets.",
+  "build": "Built",
+  "verification": "Confirmed live",
+  "verificationNote": "Asset auto-created with status 'Under warranty' and warrantyEnd = +1 year.",
+  "note": "Warranty period is fixed at 1 year in code; spec §8/§39 expects per-product warranty months — record variance.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-007",
+  "module": "SO",
+  "title": "Advance beyond Closed",
+  "type": "Negative",
+  "priority": "P3",
+  "role": "Operations",
+  "ref": "§17 Boundary",
+  "pre": "Order Closed.",
+  "steps": [
+   "Try Advance status."
+  ],
+  "expected": "Rejected: \"Cannot advance a sales order in status 'Closed'.\" Button hidden.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-008",
+  "module": "SO",
+  "title": "'Create dispatch' from sales order",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Operations",
+  "ref": "§17 Dispatch action",
+  "pre": "Order Ready for dispatch.",
+  "steps": [
+   "Click 'Create dispatch'."
+  ],
+  "expected": "Dispatch form opens prefilled with order and account; saving creates a Planned dispatch.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-009",
+  "module": "SO",
+  "title": "Milestone history is preserved",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§17 Visibility",
+  "pre": "Order with several milestones.",
+  "steps": [
+   "Open Milestones tab as Sales Executive."
+  ],
+  "expected": "Read-only chronological history with description/time.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-010",
+  "module": "SO",
+  "title": "Delivery commitment approaching alert",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Operations",
+  "ref": "§17 Alerts",
+  "pre": "Committed delivery within 7 days; order not dispatched.",
+  "steps": [
+   "Run SLA sweep."
+  ],
+  "expected": "SLA-17 alert to owner/Operations.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SO-011",
+  "module": "SO",
+  "title": "Sales order keeps PO and quotation reference",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Operations",
+  "ref": "§16 Immutable refs",
+  "pre": "Order created from PO.",
+  "steps": [
+   "Open handover tab."
+  ],
+  "expected": "PO reference and value shown; cannot be re-pointed by normal users.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Spec: immutable references; verify update restrictions.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-001",
+  "module": "DSP",
+  "title": "Create dispatch with transport details",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§17 / Flow: Dispatch",
+  "pre": "Sales order exists.",
+  "steps": [
+   "Dispatch → New.",
+   "Enter order, account, invoice no/date, dispatch date, transporter, LR/AWB, vehicle, e-way bill, expected delivery.",
+   "Save."
+  ],
+  "expected": "Dispatch created in status Planned.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-002",
+  "module": "DSP",
+  "title": "Mark dispatched → In transit → Delivered",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§17 Status flow",
+  "pre": "Dispatch Planned.",
+  "steps": [
+   "Click 'Mark dispatched'.",
+   "Click 'In transit'.",
+   "Click 'Mark delivered' with actual delivery date."
+  ],
+  "expected": "Planned → Dispatched (SLA-18 starts) → In transit → Delivered (actual delivery date stored; SLA-18 stops).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-003",
+  "module": "DSP",
+  "title": "Mark delivered requires actual delivery date",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§17 Required field",
+  "pre": "Dispatch In transit.",
+  "steps": [
+   "Click 'Mark delivered' without a date."
+  ],
+  "expected": "Rejected: \"'actual' is required to Mark delivered.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-004",
+  "module": "DSP",
+  "title": "In transit from Planned",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Operations",
+  "ref": "§17 Invalid",
+  "pre": "Dispatch Planned.",
+  "steps": [
+   "Click 'In transit'."
+  ],
+  "expected": "Rejected: \"Cannot In transit a dispatch in status 'Planned'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-005",
+  "module": "DSP",
+  "title": "Multiple dispatches for one order (partial)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§17 Partial",
+  "pre": "Order qty split.",
+  "steps": [
+   "Create two dispatches for the same order."
+  ],
+  "expected": "Both listed under the order's Dispatches tab; each has own status and invoice.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-006",
+  "module": "DSP",
+  "title": "Dispatch creation notifies salesperson",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§17 Notification",
+  "pre": "Dispatch created.",
+  "steps": [
+   "Check notification bell."
+  ],
+  "expected": "Salesperson notified.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Confirm.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSP-007",
+  "module": "DSP",
+  "title": "Dispatch visible to Sales (read) but not editable",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§17 Scope",
+  "pre": "Default matrix (Sales Exec: read).",
+  "steps": [
+   "Open dispatch; try Edit/Mark dispatched."
+  ],
+  "expected": "Read-only for Sales Executive; action buttons hidden/blocked.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-001",
+  "module": "PAY",
+  "title": "Milestones created on PO acceptance",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Accounts",
+  "ref": "§21 / Flow P6",
+  "pre": "PO accepted.",
+  "steps": [
+   "Open Payments list."
+  ],
+  "expected": "Milestones with percentage, amount, due date and status 'Not due'; amounts sum to PO value.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-002",
+  "module": "PAY",
+  "title": "Record partial receipt",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Accounts",
+  "ref": "§21 Receipts",
+  "pre": "Milestone amount ₹3,00,000.",
+  "steps": [
+   "Click 'Record receipt'; enter ₹1,00,000."
+  ],
+  "expected": "Status = Partially received; Receipt row created; balance ₹2,00,000 on screen.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-003",
+  "module": "PAY",
+  "title": "Record balance to fully receive",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Accounts",
+  "ref": "§21 Receipts",
+  "pre": "Milestone Partially received.",
+  "steps": [
+   "Record ₹2,00,000."
+  ],
+  "expected": "Status = Received; received date set; SLA-22 stops; 'Record receipt' and 'Send reminder' hidden.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-004",
+  "module": "PAY",
+  "title": "Receipt amount required",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Accounts",
+  "ref": "§21 Receipts",
+  "pre": "Milestone open.",
+  "steps": [
+   "Record receipt with blank/zero amount."
+  ],
+  "expected": "Rejected: \"'amt' is required to Record receipt.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-005",
+  "module": "PAY",
+  "title": "Receipt against already Received milestone",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Accounts",
+  "ref": "§21 Receipts",
+  "pre": "Milestone Received.",
+  "steps": [
+   "Try Record receipt."
+  ],
+  "expected": "Rejected: \"Cannot record a receipt against a payment milestone that is already Received.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-006",
+  "module": "PAY",
+  "title": "Over-payment handling",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Accounts",
+  "ref": "§21 Receipts",
+  "pre": "Milestone ₹3,00,000.",
+  "steps": [
+   "Record ₹3,50,000."
+  ],
+  "expected": "Milestone marked Received (received ≥ amount). Verify excess is visible, not silently lost.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Code treats ≥ as fully received; no over-payment warning.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-007",
+  "module": "PAY",
+  "title": "Send payment reminder email",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Accounts",
+  "ref": "§21 Reminder",
+  "pre": "Open milestone; account contact has email.",
+  "steps": [
+   "Click 'Send reminder'."
+  ],
+  "expected": "Email sent to first contact with email; response includes recipient; message mentions milestone, amount and due date (en-IN).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-PAY-008",
+  "module": "PAY",
+  "title": "Reminder with no contact email",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Accounts",
+  "ref": "§21 Reminder",
+  "pre": "Account contacts have no email.",
+  "steps": [
+   "Click 'Send reminder'."
+  ],
+  "expected": "Rejected: \"No contact with an email address is on file for this account — add one before sending a reminder.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-009",
+  "module": "PAY",
+  "title": "Reminder on a Received milestone",
+  "type": "Negative",
+  "priority": "P3",
+  "role": "Accounts",
+  "ref": "§21 Reminder",
+  "pre": "Milestone Received.",
+  "steps": [
+   "Call Send reminder (API)."
+  ],
+  "expected": "Rejected: \"Payment milestone … is already Received — no reminder needed.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-010",
+  "module": "PAY",
+  "title": "Overdue status and follow-up",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Accounts",
+  "ref": "§21 / Flow: Overdue",
+  "pre": "Milestone due date yesterday, unpaid.",
+  "steps": [
+   "Wait for sweep / open list."
+  ],
+  "expected": "Milestone shows Overdue; escalation events show customer reminder and 'Accounts + Sales owner notified'; SLA-22 handles reminders.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Flow chart: Overdue creates a payment follow-up Activity — confirm Activity auto-creation.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-011",
+  "module": "PAY",
+  "title": "Order page shows total, received, outstanding, next due",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§21 Order summary",
+  "pre": "Order with several milestones.",
+  "steps": [
+   "Open order Payments tab."
+  ],
+  "expected": "Totals reconcile with milestone list.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify summary header exists on order page.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-PAY-012",
+  "module": "PAY",
+  "title": "Block configurable actions if credit rule requires",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Operations",
+  "ref": "§21 Block rule",
+  "pre": "Overdue milestone before dispatch.",
+  "steps": [
+   "Try dispatching."
+  ],
+  "expected": "Spec: configurable block.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "A dispatch was created against a sales order whose payment milestone was unpaid; no gating code exists.",
+  "note": "No payment/credit gating found.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-PAY-013",
+  "module": "PAY",
+  "title": "Payment receipts restricted by field security",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§21 Security",
+  "pre": "'Payment receipts' field security restricted.",
+  "steps": [
+   "Open payments as Sales Exec (if permitted)."
+  ],
+  "expected": "Receipt amounts hidden for restricted roles.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AST-001",
+  "module": "AST",
+  "title": "Installed asset record contents",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§18 / Flow P7",
+  "pre": "Order commissioned.",
+  "steps": [
+   "Open Installed assets; open new asset."
+  ],
+  "expected": "Serial, model, account, status Under warranty, installation/commissioning dates, warranty start/end, parent order.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AST-002",
+  "module": "AST",
+  "title": "Assets visible from the account",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§18 Account view",
+  "pre": "Account with asset.",
+  "steps": [
+   "Account → Installed assets tab."
+  ],
+  "expected": "Asset listed; clicking opens asset with Service history tab.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AST-003",
+  "module": "AST",
+  "title": "Raise service ticket from asset",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§18 Actions",
+  "pre": "Asset exists.",
+  "steps": [
+   "Click 'Raise service ticket'."
+  ],
+  "expected": "Ticket form opens prefilled with asset and account; saved ticket links back.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AST-004",
+  "module": "AST",
+  "title": "Create AMC renewal from asset",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§19 Actions",
+  "pre": "Asset exists.",
+  "steps": [
+   "Click 'Create AMC renewal'."
+  ],
+  "expected": "Coverage form opens prefilled with asset/account.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AST-005",
+  "module": "AST",
+  "title": "Asset coverage status values",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Service Manager",
+  "ref": "§18 Status",
+  "pre": "—",
+  "steps": [
+   "Edit asset status."
+  ],
+  "expected": "Under warranty / Under AMC / Out of coverage / Decommissioned selectable.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "No automatic status transition when warranty ends; verify.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AST-006",
+  "module": "AST",
+  "title": "Installation / commissioning report",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Service Manager",
+  "ref": "§18 Report",
+  "pre": "Commissioned order.",
+  "steps": [
+   "Look for a report/download."
+  ],
+  "expected": "Spec: generate installation/commissioning report.",
+  "build": "Gap",
+  "verification": "Confirmed live + code",
+  "verificationNote": "GET /modules/installations returns 404 'Module is not available'; no installation model in the schema.",
+  "note": "No installation module/report found; only asset creation.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-AST-007",
+  "module": "AST",
+  "title": "Installation workflow (Planned/In progress/Installed/Pending sign-off/Closed)",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Operations",
+  "ref": "§18 Statuses",
+  "pre": "—",
+  "steps": [
+   "Look for installation records with customer sign-off."
+  ],
+  "expected": "Spec: installation entity with sign-off reminder.",
+  "build": "Gap",
+  "verification": "Confirmed live + code",
+  "verificationNote": "Same as above: no installation module. Commissioning is only a sales-order status.",
+  "note": "Installation is only a status on the sales order.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-AMC-001",
+  "module": "AMC",
+  "title": "Create warranty / AMC coverage",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§19 / Flow P7",
+  "pre": "Asset exists.",
+  "steps": [
+   "AMC → New.",
+   "Select asset, account, type AMC, start, end, value, visits included.",
+   "Save."
+  ],
+  "expected": "Coverage created with status 'Not due'; visits used/included shown (e.g. 0/4).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-002",
+  "module": "AMC",
+  "title": "Renewal reminder schedule 90/60/30",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§19 Reminders",
+  "pre": "Coverage ending in 100 days.",
+  "steps": [
+   "Open Renewal reminders tab."
+  ],
+  "expected": "Three events at end − 90, − 60, − 30 days.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-003",
+  "module": "AMC",
+  "title": "Mark contacted",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§19 Status flow",
+  "pre": "Coverage Not due/Due soon.",
+  "steps": [
+   "Click 'Mark contacted'."
+  ],
+  "expected": "Status = Contacted; not allowed from other statuses.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-004",
+  "module": "AMC",
+  "title": "Create renewal opportunity",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§19 Renewal opportunity",
+  "pre": "Coverage Due soon.",
+  "steps": [
+   "Click 'Create renewal opportunity'."
+  ],
+  "expected": "Opportunity 'AMC Renewal — <model>' created at Qualified, value = coverage value, close date ≈ +90 days, next action 'Follow up on AMC renewal'; coverage linked; user navigated to the opportunity.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-005",
+  "module": "AMC",
+  "title": "Duplicate renewal opportunity blocked",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§19 Renewal opportunity",
+  "pre": "Coverage already has renewal opportunity.",
+  "steps": [
+   "Click again."
+  ],
+  "expected": "Rejected: \"Coverage '…' already has a renewal opportunity.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-006",
+  "module": "AMC",
+  "title": "Renewal opportunity on Renewed/Lost coverage",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§19 Renewal opportunity",
+  "pre": "Coverage Renewed.",
+  "steps": [
+   "Try create renewal opportunity."
+  ],
+  "expected": "Rejected: \"Cannot create a renewal opportunity for a coverage in status 'Renewed'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-007",
+  "module": "AMC",
+  "title": "Mark renewed only after Quoted/Negotiation",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§19 Renewed",
+  "pre": "Coverage Contacted.",
+  "steps": [
+   "Click 'Mark renewed'."
+  ],
+  "expected": "Rejected (allowed only from Quoted, Negotiation). From Negotiation: status Renewed and SLA-21 stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-008",
+  "module": "AMC",
+  "title": "Mark lost requires reason",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§19 Lost",
+  "pre": "Coverage open.",
+  "steps": [
+   "Click 'Mark lost' with blank reason, then with reason."
+  ],
+  "expected": "Blank: \"'lost' is required to Mark lost.\" With reason: status Lost; allowed from any status except Renewed/Lost.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-009",
+  "module": "AMC",
+  "title": "Auto 'Due soon' status and automatic renewal task/opportunity",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§19 Automation",
+  "pre": "Coverage end date within 90 days.",
+  "steps": [
+   "Run daily sweep; open coverage."
+  ],
+  "expected": "Spec: status moves to Due soon and a renewal task/opportunity is auto-created.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "SLA-21 reminders exist; automatic Due-soon status change and auto-created opportunity should be verified.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-010",
+  "module": "AMC",
+  "title": "Status 'Quoted' and 'Negotiation' transitions",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§19 Quote stages",
+  "pre": "Coverage Contacted.",
+  "steps": [
+   "Look for action to move to Quoted/Negotiation."
+  ],
+  "expected": "Statuses reachable (manually or through renewal opportunity progress).",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "No plain actions for Quoted/Negotiation in service; confirm they can be set via edit.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-AMC-011",
+  "module": "AMC",
+  "title": "AMC visits used vs included",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Service Manager",
+  "ref": "§19 Visits",
+  "pre": "Coverage with 4 visits included.",
+  "steps": [
+   "Update visits used to 2."
+  ],
+  "expected": "Visits column shows 2/4.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-001",
+  "module": "SVC",
+  "title": "Create service ticket linked to asset",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§20 / Flow: Service ticket",
+  "pre": "Asset exists.",
+  "steps": [
+   "Service → New.",
+   "Select account, asset, type (Breakdown), priority Critical, description.",
+   "Save."
+  ],
+  "expected": "Ticket Open; SLA-19 (first response) and SLA-20 (resolution) start with priority-specific targets.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-002",
+  "module": "SVC",
+  "title": "Ticket types",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Service Manager",
+  "ref": "§20 Types",
+  "pre": "—",
+  "steps": [
+   "Open complaint type dropdown."
+  ],
+  "expected": "Breakdown, Calibration, Preventive visit available.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-003",
+  "module": "SVC",
+  "title": "Assign engineer requires engineer",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§20 Status flow",
+  "pre": "Ticket Open.",
+  "steps": [
+   "Click 'Assign engineer' with none selected."
+  ],
+  "expected": "Rejected: \"'engineer' is required to Assign engineer.\" With engineer: status Assigned; SLA-19 stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-004",
+  "module": "SVC",
+  "title": "Schedule visit requires date",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§20 Status flow",
+  "pre": "Ticket Assigned.",
+  "steps": [
+   "Click 'Schedule visit' without date."
+  ],
+  "expected": "Rejected: \"'visitDate' is required to Schedule visit.\" With date: status Visit scheduled.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-005",
+  "module": "SVC",
+  "title": "Start work; parts required",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Service Engineer",
+  "ref": "§20 Status flow",
+  "pre": "Ticket Visit scheduled.",
+  "steps": [
+   "Click 'Start work'.",
+   "Click 'Parts required' with parts list."
+  ],
+  "expected": "Status In progress → Parts required (parts text required: \"'parts' is required…\"); 'Start work' allowed again from Parts required.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-006",
+  "module": "SVC",
+  "title": "Resolve requires resolution text",
+  "type": "Negative",
+  "priority": "P1",
+  "role": "Service Engineer",
+  "ref": "§20 Status flow",
+  "pre": "Ticket In progress.",
+  "steps": [
+   "Click Resolve with blank resolution."
+  ],
+  "expected": "Rejected: \"'resolution' is required to Resolve.\" With text: Resolved; SLA-20 stops.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-007",
+  "module": "SVC",
+  "title": "Request confirmation then Close",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§20 Status flow",
+  "pre": "Ticket Resolved.",
+  "steps": [
+   "Click 'Request confirmation'.",
+   "Click Close."
+  ],
+  "expected": "Resolved → Customer confirmation → Closed. Close also allowed directly from Resolved.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-008",
+  "module": "SVC",
+  "title": "Close from Open",
+  "type": "Negative",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§20 Invalid",
+  "pre": "Ticket Open.",
+  "steps": [
+   "Attempt Close."
+  ],
+  "expected": "Rejected: \"Cannot Close a service ticket in status 'Open'.\"",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-009",
+  "module": "SVC",
+  "title": "Priority-based SLA targets",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§20 SLA",
+  "pre": "SLA-19/20 targets per priority (Critical 24h etc.).",
+  "steps": [
+   "Create Critical and Low tickets; compare SLA targets."
+  ],
+  "expected": "Different due times per priority; breach escalates to Service Manager.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-010",
+  "module": "SVC",
+  "title": "Service history on Asset and Account",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Service Manager",
+  "ref": "§20 History",
+  "pre": "Tickets exist.",
+  "steps": [
+   "Open asset → Service history; account → Service."
+  ],
+  "expected": "All tickets for the asset/account appear.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SVC-011",
+  "module": "SVC",
+  "title": "Repeated failures flag asset/account",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Service Manager",
+  "ref": "§20 Repeat failures",
+  "pre": "3 tickets on one asset in a short period.",
+  "steps": [
+   "Open asset / dashboard."
+  ],
+  "expected": "Spec: flag for management review.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "Three Breakdown tickets on one asset: the asset and account records carry no flag/review field.",
+  "note": "No repeat-failure rule found.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-SVC-012",
+  "module": "SVC",
+  "title": "Warranty/chargeable status on ticket",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Service Manager",
+  "ref": "§20 Chargeable",
+  "pre": "Asset under warranty vs expired.",
+  "steps": [
+   "Create tickets against each."
+  ],
+  "expected": "Warranty status/chargeable flag reflects coverage.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify field is derived or manually set.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENG-001",
+  "module": "ENG",
+  "title": "Create nurturing sequence with steps",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Head",
+  "ref": "§28 / Flow: Nurturing",
+  "pre": "Approved email/WhatsApp templates exist.",
+  "steps": [
+   "Nurturing → New sequence; choose trigger; add steps with delays.",
+   "Save and activate."
+  ],
+  "expected": "Sequence saved with ordered steps (stepOrder set by caller).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENG-002",
+  "module": "ENG",
+  "title": "Trigger: lead moved to Nurture enrols lead",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§28 Triggers",
+  "pre": "Sequence triggered on 'Lead moved to Nurture' is active.",
+  "steps": [
+   "Move a lead to Nurture."
+  ],
+  "expected": "Lead enrolled; first step runs per delay.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Confirm trigger wiring for MfgLead (enrolment service targets the generic Lead model).",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENG-003",
+  "module": "ENG",
+  "title": "Other triggers: Lead created, Quotation sent, Opportunity lost (postponed), AMC renewal",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Head",
+  "ref": "§28 Triggers",
+  "pre": "Active sequences for each trigger.",
+  "steps": [
+   "Fire each event."
+  ],
+  "expected": "Corresponding sequence enrols the record.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify each trigger is implemented.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENG-004",
+  "module": "ENG",
+  "title": "Duplicate enrolment blocked; re-enrol after removal",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§28 Enrolment",
+  "pre": "Lead enrolled active.",
+  "steps": [
+   "Enrol again.",
+   "Remove enrolment; enrol again."
+  ],
+  "expected": "Active duplicate → conflict error; after removal re-activation resets current step.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENG-005",
+  "module": "ENG",
+  "title": "Template approval workflow (Draft → Pending → Approved/Rejected)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Head",
+  "ref": "Flow: Templates",
+  "pre": "Template exists.",
+  "steps": [
+   "Submit for approval; approve/reject as Sales Head."
+  ],
+  "expected": "Only approved email/WhatsApp templates can be used by sequences.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Templates exist; confirm approval states are implemented and enforced.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ENG-006",
+  "module": "ENG",
+  "title": "Send email using approved template / log it",
+  "type": "Integration",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§29 Email",
+  "pre": "Email integration configured.",
+  "steps": [
+   "Send email to a contact from a record."
+  ],
+  "expected": "Email delivered; communication logged on the record.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Per-org SMTP/SES integration exists; verify logging on manufacturing records.",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-ENG-007",
+  "module": "ENG",
+  "title": "WhatsApp template message & logging",
+  "type": "Integration",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§29 WhatsApp",
+  "pre": "WhatsApp integration configured.",
+  "steps": [
+   "Send template message to a lead/contact."
+  ],
+  "expected": "Delivered with correct +91 prefix; status logged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-SLA-001",
+  "module": "SLA",
+  "title": "22 default SLA policies seeded",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§28 / Flow: SLA timers",
+  "pre": "New manufacturing org.",
+  "steps": [
+   "Administration → SLA timers."
+  ],
+  "expected": "SLA-01 … SLA-22 present with start event, stop event, calendar type, targets and escalation levels.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SLA-002",
+  "module": "SLA",
+  "title": "Business-hours calculation",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§28 Business hours",
+  "pre": "Calendar Mon–Fri 09:00–18:00, Sat 09:00–13:00, Sun closed; 1-hour target.",
+  "steps": [
+   "Create a lead at 17:30 Friday.",
+   "Check due time."
+  ],
+  "expected": "Due = Monday 09:30 (clock only runs in business hours).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-SLA-003",
+  "module": "SLA",
+  "title": "Holiday excluded from business time",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§28 Holidays",
+  "pre": "Holiday configured (e.g. 2026-10-20 Dussehra).",
+  "steps": [
+   "Create lead on the previous working day near close."
+  ],
+  "expected": "Due time skips the holiday.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-SLA-004",
+  "module": "SLA",
+  "title": "Pause statuses automatically pause timer",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§28 Pause",
+  "pre": "Policy with pauseStatuses.",
+  "steps": [
+   "Move record into a pause status; then out."
+  ],
+  "expected": "Timer pauses and resumes; elapsed excludes paused time.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-SLA-005",
+  "module": "SLA",
+  "title": "Escalation levels notify owner then manager",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§28 Escalation",
+  "pre": "Policy with 2 escalation levels; short target for testing.",
+  "steps": [
+   "Create record; let it breach."
+  ],
+  "expected": "Level-1 and level-2 recipients notified (in-app + email per channel); events logged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SLA-006",
+  "module": "SLA",
+  "title": "In-app notification bell",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§28 Notifications",
+  "pre": "SLA breach occurred for the user.",
+  "steps": [
+   "Click header bell."
+  ],
+  "expected": "Notification appears; can be opened and marked read; Notifications page lists it.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SLA-007",
+  "module": "SLA",
+  "title": "Money-based targets (≥ ₹1 Cr / ≥ ₹50 L)",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§28 Money thresholds",
+  "pre": "Records with different values.",
+  "steps": [
+   "Create lead ≥ ₹50 L and opp ≥ ₹1 Cr."
+  ],
+  "expected": "Tighter targets applied.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SLA-008",
+  "module": "SLA",
+  "title": "Date-triggered SLAs (SLA-05/06/13/17/21/22)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§28 Date-triggered",
+  "pre": "Records with dates near threshold.",
+  "steps": [
+   "Run sweep/cron (or wait)."
+  ],
+  "expected": "Timers start at the date event (e.g. validity − 7 days, end − 90 days, due date).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:wall-clock"
+ },
+ {
+  "id": "TC-SLA-009",
+  "module": "SLA",
+  "title": "Edit policy target and see it take effect",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§28 Admin",
+  "pre": "SLA-01 target 1 hour.",
+  "steps": [
+   "Change to 2 hours; create new lead."
+  ],
+  "expected": "New lead uses 2 hours.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SLA-010",
+  "module": "SLA",
+  "title": "Automation executions logged",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§37 Automation log",
+  "pre": "Rules have fired.",
+  "steps": [
+   "Reports → 'Automation execution log' / Automation runs."
+  ],
+  "expected": "Each run has status and log events; failures are diagnosable.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "AutomationRun read path exists; verify events are written.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-001",
+  "module": "DSH",
+  "title": "Salesperson 'My day' dashboard",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§25.2",
+  "pre": "Rep has follow-ups, leads, opps, visits.",
+  "steps": [
+   "Open Dashboard."
+  ],
+  "expected": "Shows today's follow-ups/meetings, overdue follow-ups, new/uncontacted leads, opportunities by stage, visits/demos due, quotations pending follow-up, PO expected, payment follow-ups — only for this rep.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-002",
+  "module": "DSH",
+  "title": "Team / management dashboard KPIs",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§25.1",
+  "pre": "Data across the team.",
+  "steps": [
+   "Open management dashboard."
+  ],
+  "expected": "KPIs: New leads, Qualified leads, Active pipeline, Weighted pipeline, Quotation value, PO/Booked sales, Won/Lost (count+value), Outstanding; Stage funnel; Aging buckets (0–15d, 16–30d, 31–60d, 60d+).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-003",
+  "module": "DSH",
+  "title": "Weighted pipeline = value × stage probability",
+  "type": "Reconciliation",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§25.1 Weighted",
+  "pre": "Opps: ₹10 L at Costing (45%), ₹20 L at Negotiation (60%).",
+  "steps": [
+   "Read Weighted pipeline."
+  ],
+  "expected": "= 4.5 L + 12 L = ₹16.5 L; Active pipeline = ₹30 L.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-004",
+  "module": "DSH",
+  "title": "Stage funnel counts",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§25.1 Funnel",
+  "pre": "Known counts of leads/opps/quotes/negotiation/PO.",
+  "steps": [
+   "Open funnel."
+  ],
+  "expected": "Counts equal list counts: Leads → Opportunities → Quotations → Negotiation → PO received.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-005",
+  "module": "DSH",
+  "title": "KPI drill-down equals report/list for same filters",
+  "type": "Reconciliation",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§37 Reconciliation",
+  "pre": "Dashboard and matching report.",
+  "steps": [
+   "Click a KPI; compare with list/report using identical filters."
+  ],
+  "expected": "Counts and sums match exactly.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-006",
+  "module": "DSH",
+  "title": "Dashboard obeys hierarchy",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§27 Scoping",
+  "pre": "Two teams.",
+  "steps": [
+   "Manager A views dashboard; Director views."
+  ],
+  "expected": "Manager sees only own team's numbers; Director sees whole org.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-DSH-007",
+  "module": "DSH",
+  "title": "Target vs achievement tile",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§25.2",
+  "pre": "Targets configured.",
+  "steps": [
+   "View tile."
+  ],
+  "expected": "Spec: monthly/quarterly target vs achievement.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "Dashboard payloads contain no target/achievement data (team: kpis, funnel, aging, teamPerformance, pendingApprovals, overduePayments; my-day: kpis, actionQueue, dealsNeedingAttention, visitsAndTrials, pipelineByPhase).",
+  "note": "No target model found in manufacturing schema.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-DSH-008",
+  "module": "DSH",
+  "title": "Stagnant/high-value deals needing attention",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§25.2",
+  "pre": "Deals past stage threshold.",
+  "steps": [
+   "View tile/list."
+  ],
+  "expected": "Stagnant deals listed.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify tile exists in My Day.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-001",
+  "module": "RPT",
+  "title": "All 25 standard reports are listed and run",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§25.3",
+  "pre": "Reports seeded.",
+  "steps": [
+   "Reports → open each report."
+  ],
+  "expected": "Lead source & campaign; Lead response SLA; Lead-to-opportunity conversion; Opportunity stage conversion; Opportunity aging/stagnation; Pipeline & weighted; Expected PO/order booking; Average sales cycle; Salesperson/team performance; Win/loss & lost reason; Competitor analysis; Quotation conversion & revision; Order/dispatch status; Product/SKU-wise; Industry-wise; Customer/account-wise; Territory-wise; Repeat business/cross-sell; Payment outstanding & aging; Installed base; Warranty expiry; AMC renewal; Service SLA & ticket aging; SLA compliance; Automation execution log — each opens without error and shows a table.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-002",
+  "module": "RPT",
+  "title": "Report filters (date, owner, region, product, industry, source, customer)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§25.3 Filters",
+  "pre": "Report open.",
+  "steps": [
+   "Apply each filter in turn and in combination."
+  ],
+  "expected": "Rows narrow correctly; totals update; clearing filters restores.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-003",
+  "module": "RPT",
+  "title": "Export report to Excel/CSV",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§26 Export",
+  "pre": "Report with data.",
+  "steps": [
+   "Click 'Export Excel'."
+  ],
+  "expected": "A real CSV/Excel file downloads with the same rows and columns as on screen.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-004",
+  "module": "RPT",
+  "title": "Export report to PDF",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§26 Export",
+  "pre": "Report with data.",
+  "steps": [
+   "Click 'Export PDF'."
+  ],
+  "expected": "PDF downloads with title, filters, table.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-005",
+  "module": "RPT",
+  "title": "Export respects field-level security",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§26 Permission",
+  "pre": "Report/list containing restricted fields (cost/margin).",
+  "steps": [
+   "Export as Sales Executive."
+  ],
+  "expected": "Restricted columns are absent in file; module export permission enforced (E flag).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-006",
+  "module": "RPT",
+  "title": "Scheduled email delivery (daily/weekly/monthly)",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§26 Schedule",
+  "pre": "Report with schedule set.",
+  "steps": [
+   "Set frequency + recipients; wait for run."
+  ],
+  "expected": "Email with report delivered to authorised recipients only.",
+  "build": "Gap",
+  "verification": "Confirmed in code",
+  "verificationNote": "scheduleFrequency is only stored; mfg-reports has no mailer, cron or queue. (The local org has no seeded reports, so this was not exercised live.)",
+  "note": "Schedule frequency is stored (read path only); no sender found. Verify and log.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-RPT-007",
+  "module": "RPT",
+  "title": "Report totals equal list data",
+  "type": "Reconciliation",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§37 Reconciliation",
+  "pre": "Same filters.",
+  "steps": [
+   "Compare Pipeline report with Opportunities list."
+  ],
+  "expected": "Equal values.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-008",
+  "module": "RPT",
+  "title": "Report scoping by role",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§25.3",
+  "pre": "Reps A and B.",
+  "steps": [
+   "Run salesperson report as A."
+  ],
+  "expected": "Only A's data (or role-allowed scope).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-RPT-009",
+  "module": "RPT",
+  "title": "Empty result handling",
+  "type": "Negative",
+  "priority": "P3",
+  "role": "Sales Manager",
+  "ref": "§25.3",
+  "pre": "Filter returns nothing.",
+  "steps": [
+   "Apply impossible filter."
+  ],
+  "expected": "'No data' state, no error; export still works (empty file).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-001",
+  "module": "ADM",
+  "title": "Master values editable (sources, stages, industries, territories …)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§36 / Flow: Administration",
+  "pre": "Administration page.",
+  "steps": [
+   "Add a new lead source and a lost reason.",
+   "Open New lead and Mark lost."
+  ],
+  "expected": "New values appear immediately in dropdowns; deactivating hides them from new records but keeps history.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-002",
+  "module": "ADM",
+  "title": "Stage probabilities configurable",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§36 Stages",
+  "pre": "Stage master.",
+  "steps": [
+   "Change 'Negotiation' probability to 70%.",
+   "Open dashboard weighted pipeline."
+  ],
+  "expected": "Weighted pipeline uses 70% for Negotiation.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-003",
+  "module": "ADM",
+  "title": "Role permission matrix edit",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§27 Permissions",
+  "pre": "Matrix visible.",
+  "steps": [
+   "Remove 'Create' for Sales Executive on Leads; log in as Sales Executive."
+  ],
+  "expected": "New Lead button hidden; API create returns 403.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-004",
+  "module": "ADM",
+  "title": "Change record access (Own/Team/All)",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§27 Record access",
+  "pre": "Sales Executive default OWN.",
+  "steps": [
+   "Switch to ALL for Opportunities; re-login as Sales Exec."
+  ],
+  "expected": "Rep now sees all org opportunities.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-005",
+  "module": "ADM",
+  "title": "Field security toggles (6)",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§27 Field security",
+  "pre": "Toggles: Standard cost, Minimum selling price, Costing & margin, Approval thresholds, Competitor pricing, Payment receipts.",
+  "steps": [
+   "Allow 'Costing & margin' for Sales Manager; log in as Sales Manager."
+  ],
+  "expected": "Costing becomes accessible to that role; reverting hides it again.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-006",
+  "module": "ADM",
+  "title": "Business hours & holidays",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§36 Business calendar",
+  "pre": "Calendar page.",
+  "steps": [
+   "Change Saturday to closed; add a holiday."
+  ],
+  "expected": "SLA due times recalculated for new timers accordingly.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-007",
+  "module": "ADM",
+  "title": "Automation rules list and runs",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§28 Automation rules",
+  "pre": "Rules page.",
+  "steps": [
+   "Open automation rules; open a run's events."
+  ],
+  "expected": "Rules and run history visible.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Read path only.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-008",
+  "module": "ADM",
+  "title": "Document templates (quotation layout / T&C)",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§36 Document templates",
+  "pre": "Document templates page.",
+  "steps": [
+   "Create template; use in quotation."
+  ],
+  "expected": "Template saved and selectable.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify quotation consumes the template.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-009",
+  "module": "ADM",
+  "title": "Manufacturing defaults seeded for new org",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§36 Defaults",
+  "pre": "Create a new Manufacturing org.",
+  "steps": [
+   "Check masters, roles, approval rules, SLA, holidays, reports."
+  ],
+  "expected": "13 masters, 22 modules of permissions, 6 field-security entries, 8 approval rules, 22 SLA policies, calendar and 25 reports exist.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-010",
+  "module": "ADM",
+  "title": "Master with competitor list",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§36 Masters",
+  "pre": "Masters page.",
+  "steps": [
+   "View competitors."
+  ],
+  "expected": "Avery Weigh-Tronix, Essae Digitronics, Mettler Toledo, Local fabricator, Other.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-ADM-011",
+  "module": "ADM",
+  "title": "Non-admin cannot open Administration",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Access to admin",
+  "pre": "—",
+  "steps": [
+   "Open /administration as Sales Executive."
+  ],
+  "expected": "Access denied / hidden.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-TEAM-001",
+  "module": "TEAM",
+  "title": "Invite user and assign role + territory",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "Flow: Team",
+  "pre": "Users page.",
+  "steps": [
+   "Invite user with email; choose a manufacturing role and territory.",
+   "Open invitation link and set password."
+  ],
+  "expected": "User moves Invited → Active; has permissions of the chosen role; visible in owner dropdowns.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-TEAM-002",
+  "module": "TEAM",
+  "title": "Deactivate user",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "Flow: Team",
+  "pre": "Active user with records.",
+  "steps": [
+   "Deactivate user; try login."
+  ],
+  "expected": "Login blocked; records remain and can be reassigned.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-TEAM-003",
+  "module": "TEAM",
+  "title": "Resend invite",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "Flow: Team",
+  "pre": "User Invited.",
+  "steps": [
+   "Click 'Resend invite'."
+  ],
+  "expected": "New invitation email sent.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-TEAM-004",
+  "module": "TEAM",
+  "title": "Connect Meta / Google / Website webhook source",
+  "type": "Integration",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§30 Integrations",
+  "pre": "Integrations page.",
+  "steps": [
+   "Configure a source; send a sample lead."
+  ],
+  "expected": "Lead created via pipeline (Sync → Dedupe → Lead created); error cases show 'Error / retry'.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-TEAM-005",
+  "module": "TEAM",
+  "title": "Webhook retry does not duplicate",
+  "type": "Integration",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§30 Idempotency",
+  "pre": "Webhook configured.",
+  "steps": [
+   "POST the same payload twice."
+  ],
+  "expected": "One lead only; second returns duplicate/no-op; logged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-TEAM-006",
+  "module": "TEAM",
+  "title": "Webhook signature verification",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§30 Security",
+  "pre": "Facebook/Google webhook secrets set.",
+  "steps": [
+   "Send a payload with a wrong/missing signature."
+  ],
+  "expected": "Rejected (401/403); nothing ingested.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-TEAM-007",
+  "module": "TEAM",
+  "title": "CSV lead import",
+  "type": "Integration",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§30 CSV",
+  "pre": "Sample CSV (temp/leads_sample.csv).",
+  "steps": [
+   "Integrations → CSV import; map columns; import."
+  ],
+  "expected": "Rows imported, duplicates reported, errors listed per row.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Import wizard targets generic Leads; verify for Manufacturing leads.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-TEAM-008",
+  "module": "TEAM",
+  "title": "Subscription plan, seats, invoice",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "Flow: Billing",
+  "pre": "Razorpay test keys.",
+  "steps": [
+   "Billing → choose plan and seats; complete checkout with a test card."
+  ],
+  "expected": "Subscription Active; invoice Paid; failed payment shows Failed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-TEAM-009",
+  "module": "TEAM",
+  "title": "Billing-exempt internal org",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "Flow: Billing",
+  "pre": "GenXCRM internal org.",
+  "steps": [
+   "Open Billing."
+  ],
+  "expected": "No trial/seat limits applied.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:infra"
+ },
+ {
+  "id": "TC-GEN-001",
+  "module": "GEN",
+  "title": "Global search by company, phone, email, GSTIN, IDs, quotation/PO number, serial",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§26 Global search",
+  "pre": "Data exist.",
+  "steps": [
+   "Use global search with each key."
+  ],
+  "expected": "Matching records across modules returned, respecting user permissions.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "/search, /search/global and /global-search all return 404. The only search is per-list, plus the sidebar box, which filters menu items.",
+  "note": "No cross-module global search endpoint found; list-level search only. Verify.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-GEN-002",
+  "module": "GEN",
+  "title": "List page: sort, filter, pagination on every module",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§26 Lists",
+  "pre": "Each module has > 20 records.",
+  "steps": [
+   "For each module list: sort by a column, apply status filter, go to page 2."
+  ],
+  "expected": "Consistent behaviour; total/pages correct; no UI overflow.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-003",
+  "module": "GEN",
+  "title": "Saved filters and column selection",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§26 Lists",
+  "pre": "—",
+  "steps": [
+   "Try to save a filter and choose visible columns."
+  ],
+  "expected": "Spec: saved filters/column selection.",
+  "build": "Gap",
+  "verification": "CORRECTED",
+  "verificationNote": "A column chooser and a Saved-filters UI do exist in ModuleListPage, but the frontend calls GET/POST /modules/:key/filters and the backend has no such route (live: 404) and no model. Column selection = built; saved filters = UI present, backend missing, so saving fails.",
+  "note": "No saved-filter model found.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-GEN-004",
+  "module": "GEN",
+  "title": "Export list to CSV",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§26 Export",
+  "pre": "Module list.",
+  "steps": [
+   "GET /modules/:moduleKey/export or Export button."
+  ],
+  "expected": "CSV of permitted rows/columns downloads.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-005",
+  "module": "GEN",
+  "title": "Audit trail of critical changes (old/new value, user, time)",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§27 Audit",
+  "pre": "Change owner, stage, approval, status.",
+  "steps": [
+   "Open audit log / Audit tab."
+  ],
+  "expected": "Spec: every critical field change logged.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Stage history and milestone tables exist; the generic AuditLog covers org/auth events — confirm coverage of manufacturing records.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-006",
+  "module": "GEN",
+  "title": "Critical records are archived, not removed",
+  "type": "Functional",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§27 Soft delete",
+  "pre": "Each module with delete permission.",
+  "steps": [
+   "Delete a record in each module; check database."
+  ],
+  "expected": "isDeleted = true; record hidden from lists; related history intact.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-007",
+  "module": "GEN",
+  "title": "Every lead/account/opportunity has an owner",
+  "type": "Validation",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§27 Ownership",
+  "pre": "—",
+  "steps": [
+   "Create each; inspect owner."
+  ],
+  "expected": "Owner always set (defaults to creator).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-008",
+  "module": "GEN",
+  "title": "Notification inbox: read/unread",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§32 Notifications",
+  "pre": "Notifications exist.",
+  "steps": [
+   "Open bell; mark read; open Notifications page."
+  ],
+  "expected": "Counts update; links go to the related record.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-009",
+  "module": "GEN",
+  "title": "Related-record tabs navigate correctly",
+  "type": "UI/UX",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "Standard",
+  "pre": "Records linked.",
+  "steps": [
+   "Click rows in related tabs (Account → Opportunities etc.)."
+  ],
+  "expected": "Navigates to the correct module route (opps→/opportunities, pos→/purchase-orders …).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-GEN-010",
+  "module": "GEN",
+  "title": "Form drawers validate and show server errors",
+  "type": "UI/UX",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "Standard",
+  "pre": "—",
+  "steps": [
+   "Submit a form triggering a server-side validation error."
+  ],
+  "expected": "Error toast/message shown; form data retained.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SEC-001",
+  "module": "SEC",
+  "title": "Cross-tenant read isolation",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§27 Multi-tenant",
+  "pre": "Two orgs (A, B) with data.",
+  "steps": [
+   "Log in as A and request B's record IDs on every module (GET /…/:id)."
+  ],
+  "expected": "All return not found / 404; lists never include B data; dashboards exclude B.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SEC-002",
+  "module": "SEC",
+  "title": "Cross-tenant write via foreign IDs",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Super Admin",
+  "ref": "§27 Multi-tenant",
+  "pre": "Org B IDs known.",
+  "steps": [
+   "Create opportunity / quote / PO / ticket referencing B's account, contact, asset, product."
+  ],
+  "expected": "Rejected with \"… not found in your organization.\" in every module.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SEC-003",
+  "module": "SEC",
+  "title": "API authorization on every endpoint",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Authorization",
+  "pre": "—",
+  "steps": [
+   "Call endpoints without token.",
+   "Call with a role lacking permission."
+  ],
+  "expected": "401 without token; 403 for forbidden operations.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SEC-004",
+  "module": "SEC",
+  "title": "Cost/margin not leaked via API, export, PDF",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§27 Field security",
+  "pre": "Costing exists.",
+  "steps": [
+   "Inspect opportunity, quotation, product API responses and exports."
+  ],
+  "expected": "No cost/margin/min-price fields present.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SEC-005",
+  "module": "SEC",
+  "title": "Input validation & XSS",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§27 Input",
+  "pre": "—",
+  "steps": [
+   "Enter <script>alert(1)</script> in text fields; save; view."
+  ],
+  "expected": "Stored as text; never executed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-SEC-006",
+  "module": "SEC",
+  "title": "Rate limiting on login/API",
+  "type": "Security/RBAC",
+  "priority": "P3",
+  "role": "Any",
+  "ref": "§27 Rate limit",
+  "pre": "—",
+  "steps": [
+   "Send many rapid login attempts."
+  ],
+  "expected": "Throttled with 429 after threshold.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify throttler configuration.",
+  "automation": "skip:infra"
+ },
+ {
+  "id": "TC-SEC-007",
+  "module": "SEC",
+  "title": "Signed URLs for recordings/attachments",
+  "type": "Security/RBAC",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§27 Files",
+  "pre": "Attachment uploaded.",
+  "steps": [
+   "Open attachment; inspect URL."
+  ],
+  "expected": "Short-lived signed URL; no raw bucket URL.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:external-delivery"
+ },
+ {
+  "id": "TC-SEC-008",
+  "module": "SEC",
+  "title": "Director sees all, Manager team only",
+  "type": "Security/RBAC",
+  "priority": "P1",
+  "role": "Sales Manager",
+  "ref": "§27 Role hierarchy",
+  "pre": "Two teams.",
+  "steps": [
+   "Manager lists leads/opps/quotes/POs."
+  ],
+  "expected": "Only own team's records (TEAM access).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-NFR-001",
+  "module": "NFR",
+  "title": "List pages with 10,000 records",
+  "type": "Performance",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§31 Performance",
+  "pre": "Seeded large data.",
+  "steps": [
+   "Open lists, search, page through."
+  ],
+  "expected": "Pages load in < 2 s (server-side pagination).",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:perf"
+ },
+ {
+  "id": "TC-NFR-002",
+  "module": "NFR",
+  "title": "Tablet/mobile layout",
+  "type": "UI/UX",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§31 Responsive",
+  "pre": "Browser at 768 px and 390 px.",
+  "steps": [
+   "Open lists, detail, forms."
+  ],
+  "expected": "Usable layouts; no horizontal overflow; drawers scroll.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-NFR-003",
+  "module": "NFR",
+  "title": "Dropdowns inside drawers/dialogs don't overflow",
+  "type": "UI/UX",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "UI standard",
+  "pre": "—",
+  "steps": [
+   "Open any form with a long Select (sources, industries, products)."
+  ],
+  "expected": "List has max-height and scrolls inside viewport.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-NFR-004",
+  "module": "NFR",
+  "title": "Long text truncates with tooltip",
+  "type": "UI/UX",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "UI standard",
+  "pre": "Record with very long company name.",
+  "steps": [
+   "View list and detail."
+  ],
+  "expected": "Ellipsis with full text in title tooltip; no layout break.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-NFR-005",
+  "module": "NFR",
+  "title": "Dark/light theme readability",
+  "type": "UI/UX",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "UI standard",
+  "pre": "—",
+  "steps": [
+   "Toggle theme."
+  ],
+  "expected": "Text, pills, charts remain legible.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:manual-visual"
+ },
+ {
+  "id": "TC-NFR-006",
+  "module": "NFR",
+  "title": "INR currency, Indian number format, GST fields",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "§31 Localization",
+  "pre": "—",
+  "steps": [
+   "View values ≥ 1 lakh."
+  ],
+  "expected": "₹ with en-IN grouping (e.g. ₹10,00,000); GSTIN field present on accounts.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-NFR-007",
+  "module": "NFR",
+  "title": "Background job failures are logged",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§31 Reliability",
+  "pre": "Force an email failure.",
+  "steps": [
+   "Trigger action; check logs."
+  ],
+  "expected": "Failure recorded; app continues.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:infra"
+ },
+ {
+  "id": "TC-NFR-008",
+  "module": "NFR",
+  "title": "Backup & restore procedure",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Super Admin",
+  "ref": "§31 Backup",
+  "pre": "RDS backups enabled.",
+  "steps": [
+   "Restore a snapshot to a test instance."
+  ],
+  "expected": "Restore succeeds and data validated.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:infra"
+ },
+ {
+  "id": "TC-NFR-009",
+  "module": "NFR",
+  "title": "Cross-browser smoke",
+  "type": "UI/UX",
+  "priority": "P3",
+  "role": "Sales Executive",
+  "ref": "§31 Browsers",
+  "pre": "Chrome, Edge, Firefox, Safari.",
+  "steps": [
+   "Run core flows on each."
+  ],
+  "expected": "No functional/visual regressions.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "skip:cross-browser"
+ },
+ {
+  "id": "TC-E2E-001",
+  "module": "E2E",
+  "title": "Happy path: Lead → Cash → Warranty → Renewal",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Multiple roles",
+  "ref": "§2.1 / Flow P1–P7",
+  "pre": "Org seeded; users for each role; product 'Truck Weighbridge 60T' with minimum price.",
+  "steps": [
+   "Sales Exec creates lead (source IndiaMART) → contacted → qualified.",
+   "Convert to opportunity (new account, GSTIN, contact role Decision Maker).",
+   "App Engineer logs RFQ → feasible → approve for costing; schedules and completes site visit; demo successful → customer approved.",
+   "Commercial creates costing (margin 30%) → submit → approve.",
+   "Sales creates quotation with 8% discount → submit → manager approves → Mark sent.",
+   "Customer accepts → create PO (30/60/10 terms) → verify → Accept PO.",
+   "Operations acknowledges handover and advances status to Commissioned with serial.",
+   "Create dispatch → delivered; Accounts records receipts for all milestones.",
+   "Service Manager creates AMC; reminders; create renewal opportunity; raise service ticket and close it."
+  ],
+  "expected": "Every step succeeds; records are linked end-to-end (lead → account/contact/opportunity → RFQ/visit/demo → costing → quotation V1 → approval → PO → order → dispatch → milestones/receipts → asset → AMC → renewal opportunity → ticket). Dashboards and reports reflect the transactions.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-002",
+  "module": "E2E",
+  "title": "Lead duplicate → link/merge path",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Lead duplicate",
+  "pre": "Existing lead.",
+  "steps": [
+   "Create lead with same phone."
+  ],
+  "expected": "Warning and link/merge option.",
+  "build": "Partial",
+  "verification": "CORRECTED",
+  "verificationNote": "The create form does warn: on blur it searches the list for the first filled duplicate key (leads: phone, email, company) and shows 'A matching lead already exists. Open existing'. It does not block saving and there is no merge; the backend still creates the duplicate (live API: two leads, 201/201). So: UI warning + link = built; server-side enforcement and merge = missing.",
+  "note": "See LEAD duplicate case.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-003",
+  "module": "E2E",
+  "title": "Conversion keeps history and links",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Lead conversion",
+  "pre": "Qualified lead with activities.",
+  "steps": [
+   "Convert; open opportunity, account, contact."
+  ],
+  "expected": "All links correct; activities/history retained.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Verify lead activities remain accessible after conversion.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-004",
+  "module": "E2E",
+  "title": "Move opportunity through all stages",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Stage history",
+  "pre": "Opportunity.",
+  "steps": [
+   "Advance through stages with next-action each time."
+  ],
+  "expected": "Timestamps correct; days-in-stage report accurate.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-005",
+  "module": "E2E",
+  "title": "Issue V1 then revise",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Quotation revision",
+  "pre": "—",
+  "steps": [
+   "Mark V1 sent; revise; submit V2; send."
+  ],
+  "expected": "V1 = Revised/read-only; V2 linked; chain visible.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-006",
+  "module": "E2E",
+  "title": "Over-threshold discount blocked until correct approver acts",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Approval gate",
+  "pre": "Default rules.",
+  "steps": [
+   "Quote with 18% discount; try to send; Director approves; send."
+  ],
+  "expected": "Send blocked until approval; Director is routed.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-007",
+  "module": "E2E",
+  "title": "Changed price/quantity PO flagged",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Commercial / Estimation",
+  "ref": "§37 PO comparison",
+  "pre": "Quotation ₹10 L; PO ₹9.5 L.",
+  "steps": [
+   "Open PO compare."
+  ],
+  "expected": "Value row = Mismatch.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-008",
+  "module": "E2E",
+  "title": "Sales cannot access cost via screen, export or API",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Permissions",
+  "pre": "—",
+  "steps": [
+   "Try UI, export, API."
+  ],
+  "expected": "No access in any channel.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-009",
+  "module": "E2E",
+  "title": "Overdue follow-up creates logged escalation",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Sales Executive",
+  "ref": "§37 Automation",
+  "pre": "Overdue high-priority activity.",
+  "steps": [
+   "Wait for sweep; check notifications and SLA run log."
+  ],
+  "expected": "Notification/escalation logged.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-010",
+  "module": "E2E",
+  "title": "Commission serialized machine",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Operations",
+  "ref": "§37 Asset creation",
+  "pre": "Order in Installation.",
+  "steps": [
+   "Advance to Commissioned with serial."
+  ],
+  "expected": "Asset and warranty dates exist.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-011",
+  "module": "E2E",
+  "title": "Enter reminder window → renewal task/opportunity",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Service Manager",
+  "ref": "§37 AMC renewal",
+  "pre": "Coverage ending within 90 days.",
+  "steps": [
+   "Run sweep."
+  ],
+  "expected": "Renewal task/opportunity created per rule.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "See AMC automation case.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-012",
+  "module": "E2E",
+  "title": "Dashboard KPI = report for same filters",
+  "type": "E2E",
+  "priority": "P1",
+  "role": "Director",
+  "ref": "§37 Report reconciliation",
+  "pre": "—",
+  "steps": [
+   "Compare."
+  ],
+  "expected": "Equal.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-013",
+  "module": "E2E",
+  "title": "Opportunity lost → nurture/reactivation",
+  "type": "E2E",
+  "priority": "P2",
+  "role": "Sales Executive",
+  "ref": "Flow: Lost loop",
+  "pre": "Opp lost with reason 'Budget'.",
+  "steps": [
+   "Mark lost; check nurture sequence trigger / reactivation task."
+  ],
+  "expected": "Spec: postponed reasons may schedule reactivation.",
+  "build": "Gap",
+  "verification": "Confirmed in code",
+  "verificationNote": "No reactivation date/task or lost-triggered sequence found in the opportunities or nurturing services.",
+  "note": "No reactivation date/task found.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-E2E-014",
+  "module": "E2E",
+  "title": "Quality check → Rework Production",
+  "type": "E2E",
+  "priority": "P2",
+  "role": "Operations",
+  "ref": "Flow: Rework loop",
+  "pre": "Order at Quality check.",
+  "steps": [
+   "Look for 'Rework' option."
+  ],
+  "expected": "Flow chart: Quality check → Rework (loop) Production.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "Sales-order action 'Rework' returns 400 \"Unknown action 'Rework' for sales orders.\"; ORDER_FLOW is strictly linear.",
+  "note": "Advance status is linear only; no backwards/rework transition.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-E2E-015",
+  "module": "E2E",
+  "title": "PO clarification → re-verify",
+  "type": "E2E",
+  "priority": "P2",
+  "role": "Commercial / Estimation",
+  "ref": "Flow: PO clarification loop",
+  "pre": "PO Clarification required.",
+  "steps": [
+   "Try to move back to verification / accept."
+  ],
+  "expected": "Flow chart: Clarification required (loop) loop back.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Start verification is allowed only from Received; Accept allowed from Received/Under verification, not from Clarification required.",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-E2E-016",
+  "module": "E2E",
+  "title": "Partially received → Due loop & full receipt",
+  "type": "E2E",
+  "priority": "P2",
+  "role": "Accounts",
+  "ref": "Flow: Partial payment loop",
+  "pre": "Milestone.",
+  "steps": [
+   "Record partial; record remainder."
+  ],
+  "expected": "Ends Received.",
+  "build": "Built",
+  "verification": "",
+  "verificationNote": "",
+  "note": "",
+  "automation": "auto"
+ },
+ {
+  "id": "TC-P2-001",
+  "module": "P2",
+  "title": "Dealer / Channel partner management",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Head",
+  "ref": "§23 Phase 2",
+  "pre": "—",
+  "steps": [
+   "Look for Dealer/Partner module."
+  ],
+  "expected": "Partner master, deal registration, performance dashboard.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "GET /modules/dealers and /modules/partners return 404; no Dealer/Partner model.",
+  "note": "Phase-2 item per §33; no Dealer entity in schema.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-P2-002",
+  "module": "P2",
+  "title": "Tender / PSU sales management",
+  "type": "Functional",
+  "priority": "P3",
+  "role": "Sales Head",
+  "ref": "§24 Phase 2",
+  "pre": "—",
+  "steps": [
+   "Look for Tender module."
+  ],
+  "expected": "Tender entity with deadlines, EMD, checklist.",
+  "build": "Gap",
+  "verification": "Confirmed live",
+  "verificationNote": "GET /modules/tenders returns 404; no Tender model.",
+  "note": "Phase-2 item per §33; no Tender entity in schema.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-P2-003",
+  "module": "P2",
+  "title": "ERP / accounting sync",
+  "type": "Integration",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§30 Phase 3",
+  "pre": "—",
+  "steps": [
+   "Look for ERP connector."
+  ],
+  "expected": "Customer code, item master, order/dispatch/invoice/receipt sync.",
+  "build": "Gap",
+  "verification": "Confirmed live + code",
+  "verificationNote": "GET /modules/erp returns 404; no ERP connector code.",
+  "note": "Phase-3 per §33; not built.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-P2-004",
+  "module": "P2",
+  "title": "Telephony & calendar integration",
+  "type": "Integration",
+  "priority": "P3",
+  "role": "Super Admin",
+  "ref": "§29 Phase 3",
+  "pre": "—",
+  "steps": [
+   "Look for click-to-call / calendar sync on manufacturing records."
+  ],
+  "expected": "Optional per spec.",
+  "build": "Gap",
+  "verification": "Confirmed in code (weaker)",
+  "verificationNote": "No click-to-call or calendar-sync code on manufacturing modules; 'Calendar' appears only as a connection-category label in Administration.",
+  "note": "Not built for the Manufacturing workspace.",
+  "automation": "gap"
+ },
+ {
+  "id": "TC-P2-005",
+  "module": "P2",
+  "title": "Competitor master & notes on lost deals",
+  "type": "Functional",
+  "priority": "P2",
+  "role": "Sales Manager",
+  "ref": "§25 / §22",
+  "pre": "Competitors master.",
+  "steps": [
+   "Mark lost choosing competitor, enter competitor price/product, feedback."
+  ],
+  "expected": "Spec: competitor, price, product, decision date, feedback captured.",
+  "build": "Partial",
+  "verification": "",
+  "verificationNote": "",
+  "note": "Only lost reason is mandatory in service; verify competitor fields exist on the form.",
+  "automation": "auto"
+ }
+]

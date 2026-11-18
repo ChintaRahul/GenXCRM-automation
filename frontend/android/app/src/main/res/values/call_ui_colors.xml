@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Keep in sync with @color/ic_launcher_background (res/values/ic_launcher_background.xml)
+         and the web app's primary color token (frontend/src/index.css) — same brand teal.
+         Colors that don't vary between the app's own light/dark toggle (accent, semantic
+         green/red, avatar/chip backgrounds, and text/icons that always sit on one of those
+         saturated backgrounds) live only here. Colors that DO vary are re-declared in
+         values-night/call_ui_colors.xml — AppTheme.applyFromPreferences (see AppTheme.kt)
+         forces night-mode resolution to follow the app's in-app toggle rather than the
+         system setting, since the toggle is independent of system dark mode. -->
+    <color name="call_accent">#119C9C</color>
+    <color name="call_answer_green">#2ECC71</color>
+    <color name="call_decline_red">#E74C3C</color>
+    <color name="call_avatar_bg">#2A6E6E</color>
+    <!-- Text/icons on colored backgrounds (FABs, avatar, chips) — always white so it stays
+         legible against the saturated accent/green/red backgrounds regardless of theme. -->
+    <color name="call_on_accent">#FFFFFF</color>
+
+    <!-- Light-theme values — overridden in values-night for dark theme. -->
+    <color name="call_bg">#F5F6F8</color>
+    <color name="call_text_primary">#14161F</color>
+    <color name="call_text_secondary">#5F6673</color>
+    <color name="call_button_idle">#E4E7EC</color>
+    <color name="call_overlay_bg">#F0F5F6F8</color>
+</resources>

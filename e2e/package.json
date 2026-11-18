@@ -1,0 +1,18 @@
+{
+  "name": "genxcrm-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright end-to-end tests for GenXCRM (desktop + mobile-viewport)",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "seed": "npm run db:migrate:e2e --prefix ../backend && npm run db:seed:e2e --prefix ../backend && npm run db:seed:e2e:mfg --prefix ../backend"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.48.2",
+    "@types/node": "^26.2.0",
+    "typescript": "^5.3.3"
+  }
+}

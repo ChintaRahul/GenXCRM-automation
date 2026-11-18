@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "724804123527",
+    "project_id": "genxcrm-ec7b0",
+    "storage_bucket": "genxcrm-ec7b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724804123527:android:e7f6b0bab3b068492db122",
+        "android_client_info": {
+          "package_name": "com.genxcrm.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLHv0VP-rpO1I-CzedSAn4poCttZtuZfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

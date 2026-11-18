@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Organization" ADD COLUMN     "emailsSentThisCycle" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "emailCycleStartedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
